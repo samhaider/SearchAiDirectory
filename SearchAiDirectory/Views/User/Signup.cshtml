@@ -1,0 +1,201 @@
+﻿@model User
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Home Page";
+    ViewData["Meta-Description"] = "Sign up for GetDigitalContent and join to manage your brand. Create your account and create a ai-powered brand. Easy and quick registration process";
+    ViewData["Meta-Keywords"] = "sign up, GetDigitalContent, join, brand management, create, account, connect, share, easy, quick, registration process";
+}
+
+
+<div class="col-12 col-md-6 col-sm-12 my-5">
+
+    <!-- Heading -->
+    <h1 class="display-4 mb-3">Sign up</h1>
+
+    <!-- Subheading -->
+    <p class="text-warning mb-5">Free To SignUp. No <i class="bi bi-credit-card"></i> needed.</p>
+
+    <!-- Form -->
+    <form method="post" action="/Signup" class="needs-validation">
+
+        <input type="hidden" id="ID" name="ID" />
+
+        <div class="form-group mb-3">
+            <label class="form-label">User Type</label>
+            <div class="container">
+                <div class="row">
+                    <div class="form-check col-5 mx-3 card card-border text-center py-3">
+                        <label class="form-check-label" for="OneBrand">
+                            <div class="display-4"></div>
+                            <h3>User</h3>
+                            <h5>Help us rate the tools</h5>
+                        </label>
+                        <input class="form-check-inline ms-3" type="radio" id="RoleID" name="RoleID" value="1" />
+                    </div>
+                    <div class="form-check col-6 card card-border text-center py-3">
+                        <label class="form-check-label" for="MultipleBrand">
+                            <div class="display-4 fe fe-lg fe-grid"></div>
+                            <h3>Register Tool</h3>
+                            <h5>Register Your Ai Tool</h5>
+                        </label>
+                        <input class="form-check-inline ms-3" type="radio" id="RoleID" name="RoleID" value="2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+        <input type="hidden" id="TimeZone" name="TimeZone" />
+
+        <div class="form-group mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" id="Name" name="Name" class="form-control" placeholder="full name" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="name@address.com" required />
+        </div>
+
+        <div class="form-group mb-5">
+            <div class="row">
+                <div class="col"><label class="form-label">Password</label></div>
+                <div class="col-auto"><a href="/ForgotPassword" class="form-text small text-warning">Forgot password?</a></div>
+            </div>
+            <div class="input-group input-group-merge">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required />
+                <button class="input-group-text" type="button" onclick="ShowPassword();"><i id="eye-icon" class="bi bi-eye"></i></button>
+            </div>
+        </div>
+
+        <button type="submit" class="btn w-100 btn-warning mb-3">Sign up</button>
+
+        <div class="text-center">
+            <small class="text-light text-center">
+                Already have an account? <a href="/Login">Log in</a>.
+            </small>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js?trustedtypes=true&onload=onloadCallback&render=explicit" async defer></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById("TimeZone").value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        });
+
+        function onSubmitForm() {
+
+            updateSubmitButton(true);
+
+            var emailExisits = checkEmailExisits();
+            if (emailExisits == true) { updateSubmitButton(); return false; }
+
+            var validPassword = validatePassword();
+            if (validPassword == false) { updateSubmitButton(); return false; }
+
+            if (recaptcha_verified == false) { updateSubmitButton(); m.innerHTML = "Please validate that you are not a robot."; return false; }
+
+            document.getElementById('signup-form').submit();
+
+            return false;
+        }
+
+        const m = document.getElementById('invalidMessage');
+        const b = document.getElementById('SignUpButton');
+
+        var recaptcha_verified = false;
+        var onloadCallback = function () {
+
+            grecaptcha.render('html_element', {
+                'sitekey': '6Ld7PRIjAAAAAG31jBGEdU3KKGUZyXBV2HSkwOp7',
+                'callback': function (token) {
+                    recaptcha_verified = true;
+                },
+                'expired-callback': function () {
+                    m.innerHTML = "Unable to Submit Form.";
+                },
+                'error-callback': function () {
+                    m.innerHTML = "Unable to Submit Form.";
+                },
+                'data-size': "compact"
+            });
+
+        };
+
+        function checkEmailExisits() {
+            const e = document.getElementById('email');
+            var returnValue = false;
+            if (e.value != "") {
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    url: '/CheckEmailExisit',
+                    data: { email: e.value },
+                    success: function (data) {
+                        if (data === true) {
+                            m.innerHTML = "Email already exisits, please use another email or login through the login page.";
+                            returnValue = true;
+                        }
+                        else {
+                            m.innerHTML = "";
+                            returnValue = false;
+                        }
+                    }
+                });
+            }
+            return returnValue;
+        }
+
+        function validatePassword() {
+            var p = document.getElementById('password').value;
+            var returnValue = false;
+
+            var errors = [];
+            if (p.length < 8) {
+                errors.push("The password must be at least 8 characters.");
+            }
+            if (p.search(/[a-z]/i) < 0) {
+                errors.push("The password must contain at least one letter.");
+            }
+            if (p.search(/[0-9]/) < 0) {
+                errors.push("The password must contain at least one digit.");
+            }
+            if (errors.length > 0) {
+                m.innerHTML = errors.join("\n");
+                returnValue = false;
+            }
+            else {
+                m.innerHTML = "";
+                returnValue = true;
+            }
+            return returnValue;
+        }
+
+        function updateSubmitButton(submitting) {
+            if (submitting == true) {
+                b.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Loading';
+                b.disabled = true;
+            }
+            else {
+                b.innerHTML = 'Complete Signup';
+                b.disabled = false;
+            }
+        }
+
+        function ShowPassword() {
+
+            // toggle the type attribute
+            const password = document.getElementById('password');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // toggle the eye slash icon
+            const togglePassword = document.getElementById('eye-icon');
+            togglePassword.classList.toggle('fe-eye');
+            togglePassword.classList.toggle('fe-eye-off');
+        }
+    </script>
+}

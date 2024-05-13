@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Enter Reset Password";
+}
+
+<!-- Enter Code view-->
+<div class="col-12 col-md-5 col-xl-4 my-5">
+
+    <!-- Heading -->
+    <h1 class="display-4 text-center mb-3">Reset Password</h1>
+
+    <!-- Subheading -->
+    <p class="text-muted text-center mb-5">Enter the code you recieved in your email.</p>
+
+    <!-- Form -->
+    <form method="post" action="/ConfirmCode" class="needs-validation" novalidate>
+        <input type="hidden" id="email" name="email" value="@ViewBag.Email" />
+
+        <div class="form-group">
+            <label class="form-label">Reset Code</label>
+            <input type="text" id="code" name="code" class="form-control" placeholder="12345" required>
+        </div>
+
+        <button type="submit" class="btn btn-lg w-100 btn-primary mb-3">Reset Password</button>
+
+    </form>
+
+    <div class="text-center">
+        <small class="text-muted text-center">
+            Remember your password? <a href="/Login">Log in</a>.
+        </small>
+        <br />
+        <small class="text-muted text-center">
+            Don't have an account? <a href="/Signup">SignUp</a>.
+        </small>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Login";
+    ViewData["Meta-Description"] = "Log in to GetDigitalContent and access your account to market your brand. Secure and easy login process for existing members.";
+    ViewData["Meta-Keywords"] = "login, GetDigitalContent, account, connect, friends, share, updates, community, secure, existing, member";
+}
+
+<div class="col-12 col-md-6 col-sm-12 my-5">
+
+    <!-- Heading -->
+    <h1 class="display-4 mb-5">Login</h1>
+
+    <!-- Form -->
+    <form method="post" action="/Login" class="needs-validation">
+
+        <div class="form-group mb-3">
+            <label class="form-label">Email Address</label>
+            <input class="form-control" type="email" id="email" name="email" placeholder="name@address.com" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="row">
+                <div class="col"><label class="form-label">Password</label></div>
+                <div class="col-auto"><a href="/ForgotPassword" class="form-text small text-warning">Forgot password?</a></div>
+            </div>
+            <div class="input-group input-group-merge">
+                <input class="form-control" type="password" id="password" name="password" placeholder="Enter your password" required />
+                <button class="input-group-text" type="button" onclick="ShowPassword();"><i id="eye-icon" class="bi bi-eye"></i></button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-check-label me-3">Remember Me</label>
+            @Html.CheckBox("persist", new { @class = "form-check-input" })
+        </div>
+
+        <button type="submit" class="btn btn-lg w-100 btn-warning my-3">Sign in</button>
+    </form>
+
+    <div class="form-group">
+        <label class="h3 text-center text-danger m-0 p-0">@ViewBag.LoginMessage</label>
+    </div>
+
+    <div class="text-center">
+        <small class="text-light text-center">
+            Don't have an account yet? <a class="mx-2" href="/Signup">Sign up</a>
+        </small>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function ShowPassword() {
+
+            // toggle the type attribute
+            const password = document.getElementById('password');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // toggle the eye slash icon
+            const togglePassword = document.getElementById('eye-icon');
+            togglePassword.classList.toggle('fe-eye');
+            togglePassword.classList.toggle('fe-eye-off');
+        }
+    </script>
+}
