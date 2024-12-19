@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAiDirectory", "SearchAiDirectory\SearchAiDirectory.csproj", "{FD08F091-DC78-4CD3-BE9C-7EF36ACF7B39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAiDirectory.Shared", "SearchAiDirectory.Shared\SearchAiDirectory.Shared.csproj", "{AA5C0F4A-E69B-4F22-9196-78738D408814}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAiDirectory.ConsoleApp", "SearchAiDirectory.ConsoleApp\SearchAiDirectory.ConsoleApp.csproj", "{C687CBD7-41B3-47E9-BAD4-D1EE28A16F00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{FD08F091-DC78-4CD3-BE9C-7EF36ACF7B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD08F091-DC78-4CD3-BE9C-7EF36ACF7B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD08F091-DC78-4CD3-BE9C-7EF36ACF7B39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA5C0F4A-E69B-4F22-9196-78738D408814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA5C0F4A-E69B-4F22-9196-78738D408814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA5C0F4A-E69B-4F22-9196-78738D408814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA5C0F4A-E69B-4F22-9196-78738D408814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C687CBD7-41B3-47E9-BAD4-D1EE28A16F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C687CBD7-41B3-47E9-BAD4-D1EE28A16F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C687CBD7-41B3-47E9-BAD4-D1EE28A16F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C687CBD7-41B3-47E9-BAD4-D1EE28A16F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

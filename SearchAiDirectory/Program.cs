@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using SearchAiDirectory.Services;
-using System.ComponentModel.Design;
-using System.Net;
+using SearchAiDirectory.Shared.Data;
+using SearchAiDirectory.Shared.Services;
 
 namespace SearchAiDirectory;
 
@@ -16,6 +12,15 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+        builder.Services.AddMemoryCache();
+        builder.Services.AddOutputCache(options =>
+            options.AddPolicy("GlobalCachePolicy", builder =>
+            {
+                builder.Tag("global-cache");
+                builder.SetVaryByQuery(["*"]);
+                builder.Expire(TimeSpan.FromSeconds(60));
+            }));
 
         builder.Services.AddDistributedMemoryCache();
         builder.Services.Configure<CookieTempDataProviderOptions>(options =>
@@ -52,13 +57,16 @@ public class Program
 
         //Adding services to the container
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(
-            config.GetConnectionString("Default"),
-            sqlServerOptionsAction: sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(1), errorNumbersToAdd: null)));
+
+        builder.Services.AddDbContext<ApplicationDataContext>(options =>
+            options.UseSqlServer(config.GetConnectionString("Default"),
+            sqlServerOptionsAction: sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(1), errorNumbersToAdd: null))
+            .UseLazyLoadingProxies(false)
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
         builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<IToolService, ToolService>();
-        builder.Services.AddSingleton<JWTokenService>(new JWTokenService(builder.Configuration["WebsiteURL"]));
+        builder.Services.AddSingleton(new JWTokenService(builder.Configuration["WebsiteURL"]));
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -72,61 +80,13 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.UseOutputCache();
         app.UseCookiePolicy();
         app.UseSession();
         app.UseCors();
 
         app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-
+        app.MapAreaControllerRoute(name: "Website", areaName: "Website", pattern: "Website/{controller=Home}/{action=Index}/{id?}");
         app.Run();
-    }
-}
-
-public class ErrorHandlerMiddleware(IServiceScopeFactory serviceScopeFactory, RequestDelegate next)
-{
-    public async Task Invoke(HttpContext context)
-    {
-        try
-        {
-            await next(context);
-        }
-        catch (Exception error)
-        {
-            var newLog = new Log
-            {
-                User = context.User is not null && context.User.Claims is not null && context.User.Claims.Any(a => a.Type == "unique_name")
-                ? context.User.Claims.First(f => f.Type == "unique_name").Value : string.Empty,
-
-                UserIp = !string.IsNullOrEmpty(context.Connection.RemoteIpAddress.ToString())
-                ? context.Connection.RemoteIpAddress.ToString() : string.Empty,
-
-                Host = context.Request.Host.HasValue
-                ? context.Request.Host.Value : string.Empty,
-
-                Url = context.Request.GetDisplayUrl(),
-
-                Code = error is KeyNotFoundException ? (int)HttpStatusCode.NotFound
-                : error is ApplicationException ? (int)HttpStatusCode.BadRequest
-                : error is UnauthorizedAccessException ? (int)HttpStatusCode.Forbidden
-                : error is ArgumentNullException ? (int)HttpStatusCode.BadRequest
-                : error is InvalidOperationException ? (int)HttpStatusCode.BadRequest
-                : error is NotSupportedException ? (int)HttpStatusCode.NotImplemented
-                : (int)HttpStatusCode.InternalServerError,
-
-                Message = error.Message.Length > 500
-                ? error.Message[..500] : error.Message,
-
-                StackTrace = !string.IsNullOrEmpty(error.StackTrace)
-                ? error.StackTrace.Length > 1000 ? error.StackTrace[..1000] : error.StackTrace.ToString() : string.Empty,
-
-                Created = DateTime.UtcNow
-            };
-
-            using var scope = serviceScopeFactory.CreateScope();
-            ILogServices logService = scope.ServiceProvider.GetRequiredService<ILogServices>();
-            await logService.Log(newLog);
-
-            context.Response.Redirect("/Error");
-        }
     }
 }

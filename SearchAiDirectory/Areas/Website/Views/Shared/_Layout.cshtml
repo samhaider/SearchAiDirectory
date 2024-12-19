@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | SearchAiDirectory.com</title>
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="~/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="~/favicon/site.webmanifest" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/" class="text-2xl font-bold text-yellow-600 flex items-center space-x-2">
+                            <img src="~/img/logo/logo-transparent.png" alt="logo" width="50" height="50" />
+                            <span>SearchAiDirectory</span>
+                        </a>
+                    </div>
+                    <!-- Navigation Links -->
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/"
+                           class="border-transparent text-gray-700 hover:border-yellow-500 hover:text-yellow-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Home
+                        </a>
+                        <a href="/tools"
+                           class="border-transparent text-gray-700 hover:border-yellow-500 hover:text-yellow-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Tools
+                        </a>
+                        <a href="/categories"
+                           class="border-transparent text-gray-700 hover:border-yellow-500 hover:text-yellow-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Categories
+                        </a>
+                    </div>
+                </div>
+                <!-- User Navigation -->
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <a href="/login" class="text-gray-700 hover:text-yellow-600 px-3 py-2 rounded-md text-sm font-medium">
+                        Sign in
+                    </a>
+                    <a href="/register"
+                       class="bg-yellow-600 text-white hover:bg-yellow-700 px-3 py-2 rounded-md text-sm font-medium">
+                        Sign up
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Company</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="/about" class="text-base text-gray-700 hover:text-yellow-600">
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/contact" class="text-base text-gray-700 hover:text-yellow-600">
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Legal</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="/privacy" class="text-base text-gray-700 hover:text-yellow-600">
+                                Privacy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/terms" class="text-base text-gray-700 hover:text-yellow-600">
+                                Terms
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-200 pt-8">
+                <p class="text-base text-gray-400 text-center">
+                    &copy; @DateTime.Now.Year SearchAiDirectory. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    @* <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> *@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

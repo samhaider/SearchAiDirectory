@@ -1,0 +1,12 @@
+﻿global using SearchAiDirectory.Shared.Models;
+global using SearchAiDirectory.Shared.Data;
+global using SearchAiDirectory.Shared.ThirdPartyService;
+global using System.Text;
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Security.Claims;
+global using System.Text.Json;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
