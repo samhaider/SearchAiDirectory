@@ -1,6 +1,3 @@
-using SearchAiDirectory.Shared.Data;
-using SearchAiDirectory.Shared.Services;
-
 namespace SearchAiDirectory;
 
 public class Program
@@ -66,6 +63,7 @@ public class Program
 
         builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<IToolService, ToolService>();
+        builder.Services.AddTransient<IEmbeddingService, EmbeddingService>();
         builder.Services.AddSingleton(new JWTokenService(builder.Configuration["WebsiteURL"]));
         var app = builder.Build();
 

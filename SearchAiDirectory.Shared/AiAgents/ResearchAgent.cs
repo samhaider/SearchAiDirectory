@@ -1,10 +1,8 @@
 ﻿namespace SearchAiDirectory.Shared.AiAgents;
 
-public static class ResearchAgent
+public class ResearchAgent
 {
-    public static async Task<string> ResearchResponse(string userPrompt)
-    {
-        List<PerplexityMessage> Messages =
+    public List<PerplexityMessage> Messages =
             [
                 new()
                     {
@@ -13,10 +11,21 @@ public static class ResearchAgent
                     }
             ];
 
+    public async Task<string> ResearchResponse(string userPrompt)
+    {
         Messages.Add(new() { role = "user", content = userPrompt });
         string research = await PerplexityService.Research(Messages);
         Messages.Add(new() { role = "assistant", content = research });
 
-        return research;
+        return research.Trim().Normalize();
+    }
+
+    public async Task<string> GetResponseAfterResearch(string userPrompt)
+    {
+        Messages.Add(new() { role = "user", content = userPrompt });
+        string response = await PerplexityService.Research(Messages);
+        Messages.Add(new() { role = "assistant", content = response });
+
+        return response.Trim().Normalize();
     }
 }

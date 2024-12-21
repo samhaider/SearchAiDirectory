@@ -114,7 +114,7 @@ public static class OpenAiService
 
     public static async Task<float[]> GetEmbedding(string input)
     {
-        var embeddingRequest = new OpenAiEmbeddingRequest() { model = OpenAiModels.Embedding.Value, encoding_format = "float", input = TruncateTextToEmbeddingTokenLimit(input) };
+        var embeddingRequest = new OpenAiEmbeddingRequest() { input = TruncateTextToEmbeddingTokenLimit(input) };
         var content = JsonSerializer.Serialize(embeddingRequest, jsonOptions);
         var data = new StringContent(content: content, encoding: Encoding.UTF8, mediaType: "application/json");
 
@@ -296,8 +296,8 @@ public class OpenAiVisionImageUrl
 public class OpenAiEmbeddingRequest
 {
     public string input { get; set; }
-    public string model { get; set; }
-    public string encoding_format { get; set; }
+    public string model { get; } = "text-embedding-3-large";
+    public string encoding_format { get; } = "float";
 }
 public class OpenAiEmbeddingResponse
 {

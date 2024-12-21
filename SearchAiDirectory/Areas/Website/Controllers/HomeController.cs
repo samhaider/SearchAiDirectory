@@ -1,5 +1,3 @@
-using SearchAiDirectory.Areas.Website.Models;
-
 namespace SearchAiDirectory.Areas.Website.Controllers;
 
 [AllowAnonymous]

@@ -1,48 +1,28 @@
-﻿using SearchAiDirectory.Shared.Models;
-using SearchAiDirectory.Shared.Services;
-
-namespace SearchAiDirectory.Areas.Website.Controllers;
+﻿namespace SearchAiDirectory.Areas.Website.Controllers;
 
 [AllowAnonymous]
 [Area("Website")]
-public class ToolController(IToolService toolService) : Controller
+public class ToolController(IToolService toolService, IEmbeddingService embeddingService) : Controller
 {
-    [HttpGet("Listings")]
+    [HttpGet("/tools")]
     public async Task<IActionResult> List()
     {
         var tools = await toolService.GetAllTools();
         return View(tools);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Search(string query)
+    [HttpGet("/tool/{slug}")]
+    public async Task<IActionResult> Tool(string slug)
     {
-        var tools = await toolService.GetAllTools();
-        return View("List", tools);
-    }
-
-    [HttpGet("/Listing/Tool/{toolID}")]
-    public async Task<IActionResult> Tool(long toolID)
-    {
-        var tool = await toolService.GetToolByID(toolID);
+        var tool = await toolService.GetToolBySlug(slug);
         return View(tool);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateInformation(Tool updateTool)
+    [HttpPost("/tool/search")]
+    public async Task<IActionResult> Search(string query)
     {
-        await toolService.UpdateTool(updateTool);
-        return Redirect($"/Listing/Tool/{updateTool.ID}");
-    }
-
-    [HttpPost]
-    public async Task UpdateCategory(long toolID, short categoryID)
-        => await toolService.ChangeToolCategory(toolID, categoryID);
-
-    [HttpGet]
-    public async Task<IActionResult> DeleteTool(long toolID)
-    {
-        await toolService.DeleteTool(toolID);
-        return RedirectToAction("List");
+        var queryEmbedding = await OpenAiService.GetEmbedding(query);
+        var tools = await embeddingService.EmbeddingSearchTools(queryEmbedding, 9);
+        return View("List", tools);
     }
 }

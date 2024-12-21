@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SearchAiDirectory.Shared.Data;
 
@@ -11,9 +12,11 @@ using SearchAiDirectory.Shared.Data;
 namespace SearchAiDirectory.Shared.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    partial class ApplicationDataContextModelSnapshot : ModelSnapshot
+    [Migration("20241219224526_EmbeddingTable")]
+    partial class EmbeddingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,109 +69,7 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.ToTable("AppLogs", "dbo");
                 });
 
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
-
-                    b.Property<long>("CategoryID")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(750)
-                        .HasColumnType("nvarchar(750)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("LikeCount")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("MetaDescription")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("MetaKeywords")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("PriceModel")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Slug")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Website")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("WebsiteContent")
-                        .HasMaxLength(7500)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CategoryID");
-
-                    b.ToTable("Tools", "dbo");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolCategory", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MetaDescription")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("MetaKeywords")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("ToolCategories", "dbo");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolEmbedding", b =>
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Embedding", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -190,6 +91,79 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.HasIndex("ToolID");
 
                     b.ToTable("Embeddings", "dbo");
+                });
+
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<long>("CategoryID")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(750)
+                        .HasColumnType("nvarchar(750)");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MetaDescription")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("MetaKeywords")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PriceModel")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("WebsiteContent")
+                        .HasMaxLength(7500)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("Tools", "dbo");
+                });
+
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolCategory", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ToolCategories", "dbo");
                 });
 
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>
@@ -274,6 +248,17 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.ToTable("UserCodes", "dbo");
                 });
 
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Embedding", b =>
+                {
+                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
+                        .WithMany()
+                        .HasForeignKey("ToolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tool");
+                });
+
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
                 {
                     b.HasOne("SearchAiDirectory.Shared.Models.ToolCategory", "Category")
@@ -283,17 +268,6 @@ namespace SearchAiDirectory.Shared.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolEmbedding", b =>
-                {
-                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
-                        .WithMany()
-                        .HasForeignKey("ToolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tool");
                 });
 
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>

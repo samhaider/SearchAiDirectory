@@ -12,11 +12,17 @@ public class Tool
     [MaxLength(100)]
     public string Name { get; set; }
 
+    [MaxLength(100)]
+    public string Slug { get; set; }
+
     [MaxLength(750)]
     public string Description { get; set; }
 
-    [MaxLength(100)]
+    [MaxLength(300)]
     public string Website { get; set; }
+
+    [MaxLength(100)]
+    public string ImageUrl { get; set; }
 
     [MaxLength(7500)]
     public string WebsiteContent { get; set; }
@@ -31,6 +37,8 @@ public class Tool
     public string PriceModel { get; set; }
 
     public bool IsConfirmed { get; set; }
+
+    public long LikeCount { get; set; }
 
     public DateTime Created { get; set; }
 

@@ -41,7 +41,7 @@ public class ErrorHandlerMiddleware(IServiceScopeFactory serviceScopeFactory, Re
             };
 
             using var scope = serviceScopeFactory.CreateScope();
-            ILogServices logService = scope.ServiceProvider.GetRequiredService<ILogServices>();
+            IAppLogServices logService = scope.ServiceProvider.GetRequiredService<IAppLogServices>();
             await logService.AddAppLog(newLog);
 
             context.Response.Redirect("/Error");

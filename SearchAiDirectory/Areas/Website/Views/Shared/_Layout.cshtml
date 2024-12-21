@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,6 +13,7 @@
     <link rel="manifest" href="~/favicon/site.webmanifest" />
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <noscript><meta http-equiv="refresh" content="0; url=/nojs" /></noscript>
 </head>
 
 <body class="flex flex-col min-h-screen bg-gray-50">
@@ -35,9 +35,9 @@
                            class="border-transparent text-gray-700 hover:border-yellow-500 hover:text-yellow-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                             Home
                         </a>
-                        <a href="/tools"
+                        <a href="/news"
                            class="border-transparent text-gray-700 hover:border-yellow-500 hover:text-yellow-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Tools
+                            News
                         </a>
                         <a href="/categories"
                            class="border-transparent text-gray-700 hover:border-yellow-500 hover:text-yellow-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
@@ -107,8 +107,6 @@
         </div>
     </footer>
 
-    @* <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

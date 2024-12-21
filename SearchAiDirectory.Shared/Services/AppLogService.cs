@@ -1,12 +1,12 @@
 ﻿namespace SearchAiDirectory.Shared.Services;
 
-public interface ILogServices
+public interface IAppLogServices
 {
     Task AddAppLog(AppLog newLog);
     Task<IList<AppLog>> GetThisMonthAppLog();
 }
 
-public class LogServices(ApplicationDataContext db) : ILogServices
+public class AppLogServices(ApplicationDataContext db) : IAppLogServices
 {
     public async Task AddAppLog(AppLog newLog)
     {

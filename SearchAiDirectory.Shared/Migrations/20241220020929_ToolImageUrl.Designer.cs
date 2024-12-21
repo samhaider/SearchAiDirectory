@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SearchAiDirectory.Shared.Data;
 
@@ -11,9 +12,11 @@ using SearchAiDirectory.Shared.Data;
 namespace SearchAiDirectory.Shared.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    partial class ApplicationDataContextModelSnapshot : ModelSnapshot
+    [Migration("20241220020929_ToolImageUrl")]
+    partial class ToolImageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,6 +69,30 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.ToTable("AppLogs", "dbo");
                 });
 
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Embedding", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmbeddingCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ToolID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ToolID");
+
+                    b.ToTable("Embeddings", "dbo");
+                });
+
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
                 {
                     b.Property<long>("ID")
@@ -91,9 +118,6 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<long>("LikeCount")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -113,13 +137,9 @@ namespace SearchAiDirectory.Shared.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<string>("Slug")
+                    b.Property<string>("Website")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Website")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("WebsiteContent")
                         .HasMaxLength(7500)
@@ -140,25 +160,7 @@ namespace SearchAiDirectory.Shared.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MetaDescription")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("MetaKeywords")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -166,30 +168,6 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("ToolCategories", "dbo");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolEmbedding", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmbeddingCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("ToolID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ToolID");
-
-                    b.ToTable("Embeddings", "dbo");
                 });
 
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>
@@ -274,6 +252,17 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.ToTable("UserCodes", "dbo");
                 });
 
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Embedding", b =>
+                {
+                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
+                        .WithMany()
+                        .HasForeignKey("ToolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tool");
+                });
+
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
                 {
                     b.HasOne("SearchAiDirectory.Shared.Models.ToolCategory", "Category")
@@ -283,17 +272,6 @@ namespace SearchAiDirectory.Shared.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolEmbedding", b =>
-                {
-                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
-                        .WithMany()
-                        .HasForeignKey("ToolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tool");
                 });
 
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>

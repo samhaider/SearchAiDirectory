@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="SearchAiDirectory.com" />
+    <title>JavaScript Required | SearchAiDirectory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type="text/javascript">
+        // If this script runs, it means JavaScript is enabled
+        window.onload = function() {
+            // Redirect to home page immediately since JS is enabled
+            window.location.href = '/';
+        }
+
+        function checkJsAndRedirect() {
+            // This function will only run if JavaScript is enabled
+            window.location.href = '/';
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-yellow-50 to-yellow-100">
+    <!-- Main Content -->
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <!-- Left Column: Content -->
+                <div class="space-y-6 text-center md:text-left">
+                    <!-- Logo -->
+                    <div>
+                        <a href="/" class="inline-block">
+                            <h1 class="text-2xl font-bold text-yellow-600 hover:text-yellow-700 transition-colors">
+                                SearchAiDirectory
+                            </h1>
+                        </a>
+                    </div>
+
+                    <!-- Main Message -->
+                    <div class="space-y-4">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+                            JavaScript is Required
+                        </h2>
+                        <p class="text-lg text-gray-600">
+                            Our website requires JavaScript to provide you with the best possible experience.
+                            Please enable JavaScript in your browser settings and refresh the page.
+                        </p>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="space-y-4 bg-yellow-50 p-6 rounded-xl">
+                        <h3 class="font-semibold text-gray-900">How to Enable JavaScript:</h3>
+                        <ul class="space-y-2 text-gray-600 text-left list-disc list-inside">
+                            <li>Open your browser settings</li>
+                            <li>Navigate to Privacy & Security settings</li>
+                            <li>Enable JavaScript</li>
+                            <li>Refresh this page</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="pt-4">
+                        <button onclick="checkJsAndRedirect()"
+                                class="inline-flex items-center justify-center px-6 py-3
+                                       bg-yellow-600 hover:bg-yellow-700
+                                       text-white font-medium rounded-lg
+                                       transition-colors duration-200">
+                            Refresh Page
+                            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Illustration -->
+                <div class="hidden md:block">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 rounded-2xl"></div>
+                        <img src="https://images.unsplash.com/photo-1610337673044-720471f83677?w=600"
+                             alt="JavaScript Required Illustration"
+                             class="rounded-2xl w-full h-auto object-cover"
+                             style="aspect-ratio: 4/3;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

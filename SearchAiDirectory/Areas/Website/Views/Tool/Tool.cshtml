@@ -1,120 +1,48 @@
 ﻿@model Tool
 @{
-    Layout = "_LayoutHome";
+    Layout = "_Layout";
     ViewData["Title"] = Model.Name;
     ViewData["Meta-Description"] = Model.MetaDescription;
     ViewData["Meta-Keywords"] = Model.MetaKeywords;
 }
-@section Styles{
-    <link href="~/css/bootstrap-icons.css" rel="stylesheet" />
-}
-<!-- HEADER -->
-<header class="bg-dark pt-9 pb-11 d-none d-md-block">
-    <div class="container-md">
-        <div class="row align-items-center">
-            <div class="col">
-                <!-- Heading -->
-                <h1 class="fw-bold text-white mb-2">
-                    @Model.Name
-                </h1>
+
+<div class="bg-white rounded-lg shadow-sm p-6">
+    <!-- Tool Header Section -->
+    <div class="flex flex-col md:flex-row items-start gap-6">
+        <!-- Tool Image -->
+        <div class="w-full md:w-1/3">
+            <img src="@Model.ImageUrl" alt="@Model.Name" 
+                 class="w-full h-64 object-cover rounded-lg shadow-sm"
+                 onerror="this.src='/img/placeholder.png'"/>
+        </div>
+
+        <!-- Tool Info -->
+        <div class="w-full md:w-2/3">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">@Model.Name</h1>
+                    <a href="@Model.Website" target="_blank" rel="noopener noreferrer" 
+                       class="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block">
+                        Visit Website →
+                    </a>
+                </div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                    @Model.Category.Name
+                </span>
             </div>
-            <div class="col-auto">
-                <a href="javascript:history.back()" class="btn btn-primary">Back to Listing</a>
+
+            <div class="mt-6">
+                <h2 class="text-lg font-semibold text-gray-900">Description</h2>
+                <p class="mt-2 text-gray-600">@Model.Description</p>
             </div>
+
+            @if (!string.IsNullOrEmpty(Model.PriceModel))
+            {
+                <div class="mt-6">
+                    <h2 class="text-lg font-semibold text-gray-900">Pricing</h2>
+                    <p class="mt-2 text-gray-600">@Model.PriceModel</p>
+                </div>
+            }
         </div>
     </div>
-</header>
-
-<main class="pb-8 pb-md-11 mt-md-n6">
-    <div class="container-md">
-        <div class="row mb-3">
-            <!-- Card -->
-            <div class="card card-bleed shadow-light-lg mb-6">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col">
-                            <!-- Heading -->
-                            <h4 class="mb-0">
-                                Information
-                            </h4>
-                        </div>
-                        <div class="col-auto">
-                            <label class="h4">
-                                @if (Model.IsConfirmed)
-                                {
-                                    <i class="text-primary bi bi-toggle-on"></i>
-                                    <span>Confirmed</span>
-                                }
-                                else
-                                {
-                                    <i class="text-primary bi bi-toggle-off"></i>
-                                    <span>UnConfirmed</span>
-                                }
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-5">
-                        <div class="col-3 w-25 h-25 d-inline-block">
-                            <img src="~/img/avatars/projects/project-1.jpg" alt="@Model.Name" class="avatar-img rounded">
-                        </div>
-                        <div class="col-9">
-                            <h2 class="mb-3">
-                                <label class="h3" for="Name">name:</label>
-                                <label id="Name" name="Name" class="fw-bold me-3">@Model.Name</label>
-                            </h2>
-                            <hr />
-                            <h3>
-                                <label class="h4" for="Website">website:</label>
-                                <a href="@Model.Website" target="_blank" id="Website" name="Website">@Model.Website</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="col-12">
-
-                        <h4>
-                            <label class="mb-1">description:</label>
-                            <br />
-                            <label class="text-gray-700 ms-3" id="Description" name="Description" placeholder="Business description">@Model.Description</label>
-                        </h4>
-                        <br />
-                        <div class="row">
-                            <div class="col">
-                                <h4>
-                                    <label class="mb-1">address:</label>
-                                    <br />
-                                    <label class="text-gray-700 ms-3" id="Description" name="Description" placeholder="Business description">
-                                        
-                                    </label>
-                                </h4>
-                            </div>
-                            <div class="col-auto mt-7 text-warning">
-                                <span class="bi bi-star-fill"></span>
-                                <span class="bi bi-star-fill"></span>
-                                <span class="bi bi-star-fill"></span>
-                                <span class="bi bi-star-fill"></span>
-                                <span class="bi bi-star"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <!-- Card -->
-            <div class="card card-bleed shadow-light-lg mb-6">
-                <div class="card-header">
-
-                    <!-- Heading -->
-                    <h4 class="mb-0">
-                        Portfolio
-                    </h4>
-
-                </div>
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
+</div>

@@ -1,20 +1,20 @@
-﻿@model IList<Tool>
+﻿@model ToolCategory
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "Search";
-    ViewData["Meta-Description"] = "Find the tools you searched for in our comprehensive business directory.";
-    ViewData["Meta-Keywords"] = "search results, tools, digital marketing, seo marketing, ppc marketing, content marketing, social media, online presence";
+    ViewData["Title"] = Model.Name;
+    ViewData["Meta-Description"] = Model.MetaDescription;
+    ViewData["Meta-Keywords"] = Model.MetaKeywords;
 }
 
 <!-- Hero Section -->
 <div class="bg-white shadow-sm rounded-lg mb-8">
-    <div class="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
         <div class="text-center">
-            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight">
-                Search Results for Tools
+            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+                @Model.Name
             </h1>
-            <p class="mt-4 text-xl text-gray-500">
-                Find the tools you searched for in our comprehensive business directory
+            <p class="max-w-3xl mt-5 mx-auto text-xl text-gray-500">
+                @Model.MetaDescription
             </p>
         </div>
     </div>
@@ -25,18 +25,18 @@
     <!-- Tools Count -->
     <div class="flex justify-between items-center">
         <h2 class="text-xl font-semibold text-gray-900">
-            Available Tools (@Model.Count)
+            Available Tools (@Model.Tools.Count)
         </h2>
     </div>
 
     <!-- Grid Layout -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach (var tool in Model)
+        @foreach (var tool in Model.Tools.OrderByDescending(t => t.Created))
         {
             <a href="/tool/@tool.Slug" class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
                 <div class="aspect-w-16 aspect-h-9">
-                    <img src="@tool.ImageUrl"
-                         alt="@tool.Name"
+                    <img src="@tool.ImageUrl" 
+                         alt="@tool.Name" 
                          class="object-cover w-full h-48 rounded-t-lg"
                          onerror="this.src='/img/placeholder.png'" />
                 </div>
@@ -61,3 +61,13 @@
         }
     </div>
 </div>
+
+@if (!Model.Tools.Any())
+{
+    <div class="text-center py-12">
+        <div class="text-gray-500">
+            <p class="text-xl">No tools found in this category yet.</p>
+        </div>
+    </div>
+}
+

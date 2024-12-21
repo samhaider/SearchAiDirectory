@@ -13,6 +13,7 @@ public class ApplicationDataContext(DbContextOptions options) : DbContext(option
 
     public DbSet<Tool> Tools => Set<Tool>();
     public DbSet<ToolCategory> ToolCategories => Set<ToolCategory>();
+    public DbSet<ToolEmbedding> Embeddings => Set<ToolEmbedding>();
 
     public DbSet<AppLog> AppLogs => Set<AppLog>();
 }
