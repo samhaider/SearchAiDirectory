@@ -2,6 +2,6 @@
 
 public class HomePageModel
 {
-    public IList<ToolCategory> Categories { get; set; }
+    public IList<Category> Categories { get; set; }
     public IList<Tool> Top3Tools { get; set; }
 }

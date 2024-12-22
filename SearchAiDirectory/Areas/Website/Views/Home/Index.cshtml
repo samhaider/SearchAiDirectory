@@ -5,78 +5,84 @@
 }
 
 <div class="container-fluid mx-auto px-4 pb-12">
-
     <!-- Hero Section -->
-    <div class="hero bg-gradient-to-br from-gray-50 to-gray-200 p-16 rounded-xl shadow-2xl text-center w-full mb-8">
-        <h1 class="text-6xl font-bold mb-6 text-gray-800 tracking-tight">Welcome to SearchAIDirectory.com</h1>
-        <p class="text-2xl mb-8 text-gray-700">Find the best AI tools to solve your problems</p>
-        <div class="flex justify-center w-full max-w-6xl mx-auto">
+    <div class="hero bg-gradient-to-br from-gray-50 to-gray-200 p-6 md:p-16 rounded-xl shadow-2xl text-center w-full mb-8 transition-all duration-300">
+        <h1 class="text-2xl md:text-6xl font-bold mb-4 md:mb-6 text-gray-800 tracking-tight leading-tight">Welcome to SearchAIDirectory.com</h1>
+        <p class="text-xl md:text-2xl mb-6 md:mb-8 text-gray-700">Find the best AI tools to solve your problems</p>
+        <div class="flex justify-center w-full max-w-4xl md:max-w-6xl mx-auto">
             <div class="relative w-full">
-                <form method="post" action="/tool/search">
+                <form method="post" action="/tool/search" class="group">
                     <input type="text"
                            id="query"
                            name="query"
-                           class="w-full p-6 text-lg border-2 border-yellow-400 rounded-2xl
+                           class="w-full p-4 md:p-6 text-base md:text-lg border-2 border-yellow-400 rounded-2xl
                               focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:border-yellow-500
                               transition-all duration-300 ease-in-out
-                              shadow-lg hover:shadow-xl
+                              shadow-lg group-hover:shadow-xl
                               bg-white/90 backdrop-blur-sm"
                            placeholder="Search for AI tools..."
                            focus="focus"
                            required />
                     <button type="submit"
                             role="button"
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2
-                             bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl px-6 py-3
+                            class="absolute right-2 md:right-3 top-1/2 transform -translate-y-1/2
+                             bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl px-4 md:px-6 py-2 md:py-3
                              flex items-center transition-all duration-300 ease-in-out
                              shadow-md hover:shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd" />
                         </svg>
-                        <span class="ml-2 font-medium">Search</span>
+                        <span class="ml-2 font-medium hidden md:inline">Search</span>
                     </button>
                 </form>
             </div>
         </div>
-        <p class="mt-6 text-lg text-gray-600 font-medium">Over 1,000 AI Tools Curated for Your Needs</p>
+        <p class="mt-4 md:mt-6 text-base md:text-lg text-gray-600 font-medium">Over 1,000 AI Tools Curated for Your Needs</p>
     </div>
 
     <!-- Problems Section -->
-    <div class="problems mt-12">
-        <h2 class="text-3xl font-bold mb-6 text-black-800">Popular Categories</h2>
-        <div class="flex flex-wrap gap-4">
+    <div class="problems mt-8 md:mt-12">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800">Popular Categories</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
             @foreach (var category in Model.Categories.OrderByDescending(o => o.Tools.Count).Take(7).ToList())
             {
-                <div class="p-4 bg-white rounded-lg shadow-md flex items-center space-x-4">
-                    <a role="button" href="/tool/category/@category.Slug" class="text-yellow-500 font-semibold" onclick="searchProblem('Image Recognition')">@category.Name</a>
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                    <a role="button" 
+                       href="/tool/category/@category.Slug" 
+                       class="block p-4 text-yellow-500 hover:text-yellow-600 font-semibold text-sm md:text-base text-center"
+                       onclick="searchProblem('@category.Name')">
+                        @category.Name
+                    </a>
                 </div>
             }
         </div>
     </div>
 
     <!-- Tools Section -->
-    <div class="tools mt-12">
-        <h2 class="text-3xl font-bold mb-6 text-black-800">AI Tools</h2>
-        <div class="space-y-6">
+    <div class="tools mt-8 md:mt-12">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800">Featured AI Tools</h2>
+        <div class="space-y-4 md:space-y-6">
             @foreach (var tool in Model.Top3Tools)
             {
-                <div class="tool-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                <div class="tool-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                     <div class="flex flex-col md:flex-row">
-                        <div class="md:w-1/3 lg:w-1/4">
-                            <img src="@tool.ImageUrl" alt="@tool.Name" class="w-full h-full object-cover min-h-[200px]">
+                        <div class="md:w-1/3 lg:w-1/4 relative overflow-hidden">
+                            <img src="@tool.ImageUrl" 
+                                 alt="@tool.Name" 
+                                 class="w-full h-48 md:h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <div class="flex-1 p-6 flex flex-col justify-between">
+                        <div class="flex-1 p-4 md:p-6 flex flex-col justify-between">
                             <div>
-                                <h3 class="text-2xl font-bold mb-3 text-gray-800">@tool.Name</h3>
-                                <p class="text-gray-600 text-lg leading-relaxed mb-4">@tool.Description</p>
+                                <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 text-gray-800">@tool.Name</h3>
+                                <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-4 line-clamp-2 md:line-clamp-3">@tool.Description</p>
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0">
                                 <div class="flex items-center space-x-2">
                                     <button onclick="handleLike('@tool.ID')"
-                                            class="group flex items-center space-x-2 px-4 py-2 rounded-lg
+                                            class="group flex items-center space-x-2 px-3 md:px-4 py-2 rounded-lg
                                                    hover:bg-yellow-50 transition-colors duration-300">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="h-6 w-6 text-yellow-500 group-hover:text-yellow-600 transition-colors duration-300"
+                                             class="h-5 w-5 md:h-6 md:w-6 text-yellow-500 group-hover:text-yellow-600 transition-colors duration-300"
                                              fill="none"
                                              viewBox="0 0 24 24"
                                              stroke="currentColor">
@@ -92,10 +98,11 @@
                                     </button>
                                 </div>
                                 <a href="/tool/@tool.Slug"
-                                   class="inline-flex items-center px-6 py-3 bg-yellow-500 text-white rounded-lg
-                                          hover:bg-yellow-600 transition-colors duration-300 font-semibold">
+                                   class="inline-flex items-center px-4 md:px-6 py-2 md:py-3 bg-yellow-500 text-white rounded-lg
+                                          hover:bg-yellow-600 transition-all duration-300 font-semibold text-sm md:text-base
+                                          hover:translate-x-1">
                                     Learn More
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
@@ -106,7 +113,6 @@
             }
         </div>
     </div>
-
 </div>
 
 @section Scripts {
@@ -125,10 +131,10 @@
             // For now, just increment the counter locally
             countElement.textContent = currentCount + 1;
 
-            // Animate the counter
-            countElement.classList.add('scale-125');
+            // Animate the counter with a more subtle scale
+            countElement.classList.add('scale-110');
             setTimeout(() => {
-                countElement.classList.remove('scale-125');
+                countElement.classList.remove('scale-110');
             }, 200);
         }
     </script>

@@ -8,6 +8,31 @@ public static class WebScraper
 {
     private static readonly string[] sitePages = ["about", "services", "products", "contact", "about us", "our services", "our products", "contact us", "about-us", "our-services", "our-products", "contact-us", "who we are", "what we do", "our team", "team", "team members", "projects", "portfolio"];
 
+    public static async Task<string> GetFinalUrl(string url)
+    {
+        try
+        {
+            var options = new ChromeOptions();
+            options.AddArgument("--headless");
+            options.AddArgument("--disable-gpu");
+            options.AddArgument("--no-sandbox");
+
+            using var driver = new ChromeDriver(options);
+            driver.Navigate().GoToUrl(url);
+
+            // Wait for the page to load completely
+            await Task.Delay(5000);
+
+            var returningUrl = driver.Url.Replace("?ref=futuretools.io", "");
+            driver.Close();
+            return returningUrl;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
     public static async Task<string> Scrape(string url)
     {
         try

@@ -36,4 +36,10 @@ public class User
 
     [ForeignKey(nameof(ToolID))]
     public virtual Tool Tool { get; set; }
+
+    [InverseProperty(nameof(Like.User))]
+    public virtual ICollection<Like> Likes { get; set; }
+
+    [InverseProperty(nameof(Comment.User))]
+    public virtual ICollection<Comment> Comments { get; set; }
 }

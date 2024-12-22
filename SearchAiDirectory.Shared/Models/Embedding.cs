@@ -1,6 +1,6 @@
 ﻿namespace SearchAiDirectory.Shared.Models;
 
-public class ToolEmbedding
+public class Embedding
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long ID { get; set; }

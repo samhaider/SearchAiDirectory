@@ -31,7 +31,7 @@ public class UserService(ApplicationDataContext db) : IUserService
         => await db.Users.Where(w => w.ToolID.HasValue).ToListAsync();
 
     public async Task<bool> EmailExisits(string email)
-        => await db.Users.AnyAsync(w => w.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
+        => await db.Users.AnyAsync(w => w.Email.ToLower() == email.ToLower());
 
     public async Task<bool> SignUp(User newUser)
     {
@@ -52,7 +52,7 @@ public class UserService(ApplicationDataContext db) : IUserService
         var saltHash = await HashPassword(email, password);
         var user = await db.Users
             .Include(i => i.Tool)
-            .Where(w => w.Email == email && w.Password == saltHash.Value && w.IsActive)
+            .Where(w => w.Email.ToLower() == email.ToLower() && w.Password == saltHash.Value && w.IsActive)
             .SingleOrDefaultAsync();
 
         if (user is null) return null;

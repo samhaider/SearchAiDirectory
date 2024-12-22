@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SearchAiDirectory.Shared.Data;
 
@@ -11,9 +12,11 @@ using SearchAiDirectory.Shared.Data;
 namespace SearchAiDirectory.Shared.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    partial class ApplicationDataContextModelSnapshot : ModelSnapshot
+    [Migration("20241221090527_AddNewCategoryTable")]
+    partial class AddNewCategoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,88 +105,6 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.ToTable("Categories", "dbo");
                 });
 
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Comment", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
-
-                    b.Property<bool>("Approve")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("ToolID")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ToolID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Comments", "dbo");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Embedding", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmbeddingCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("ToolID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ToolID")
-                        .IsUnique();
-
-                    b.ToTable("Embeddings", "dbo");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Like", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
-
-                    b.Property<long>("ToolID")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ToolID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Likes", "dbo");
-                });
-
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
                 {
                     b.Property<long>("ID")
@@ -248,6 +169,66 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.HasIndex("CategoryID");
 
                     b.ToTable("Tools", "dbo");
+                });
+
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolCategory", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MetaDescription")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("MetaKeywords")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ToolCategories", "dbo");
+                });
+
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolEmbedding", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmbeddingCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ToolID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ToolID");
+
+                    b.ToTable("Embeddings", "dbo");
                 });
 
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>
@@ -332,62 +313,24 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.ToTable("UserCodes", "dbo");
                 });
 
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Comment", b =>
-                {
-                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
-                        .WithMany("Comments")
-                        .HasForeignKey("ToolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SearchAiDirectory.Shared.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tool");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Embedding", b =>
-                {
-                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
-                        .WithOne("Embedding")
-                        .HasForeignKey("SearchAiDirectory.Shared.Models.Embedding", "ToolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tool");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Like", b =>
-                {
-                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
-                        .WithMany("Likes")
-                        .HasForeignKey("ToolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SearchAiDirectory.Shared.Models.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tool");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
                 {
-                    b.HasOne("SearchAiDirectory.Shared.Models.Category", "Category")
+                    b.HasOne("SearchAiDirectory.Shared.Models.ToolCategory", "Category")
                         .WithMany("Tools")
                         .HasForeignKey("CategoryID");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolEmbedding", b =>
+                {
+                    b.HasOne("SearchAiDirectory.Shared.Models.Tool", "Tool")
+                        .WithMany()
+                        .HasForeignKey("ToolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tool");
                 });
 
             modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>
@@ -399,25 +342,9 @@ namespace SearchAiDirectory.Shared.Migrations
                     b.Navigation("Tool");
                 });
 
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Category", b =>
+            modelBuilder.Entity("SearchAiDirectory.Shared.Models.ToolCategory", b =>
                 {
                     b.Navigation("Tools");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.Tool", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Embedding");
-
-                    b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("SearchAiDirectory.Shared.Models.User", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }

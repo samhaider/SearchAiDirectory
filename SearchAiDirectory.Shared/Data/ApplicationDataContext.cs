@@ -9,11 +9,14 @@ public class ApplicationDataContext(DbContextOptions options) : DbContext(option
     }
 
     public DbSet<User> Users => Set<User>();
-    public DbSet<UserCode> UserCodes { get; set; }
-
+    public DbSet<UserCode> UserCodes => Set<UserCode>();
+    
     public DbSet<Tool> Tools => Set<Tool>();
-    public DbSet<ToolCategory> ToolCategories => Set<ToolCategory>();
-    public DbSet<ToolEmbedding> Embeddings => Set<ToolEmbedding>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Embedding> Embeddings => Set<Embedding>();
+    public DbSet<Like> Likes => Set<Like>();
+    public DbSet<Comment> Comments => Set<Comment>();
+
 
     public DbSet<AppLog> AppLogs => Set<AppLog>();
 }

@@ -6,8 +6,7 @@ public class Tool
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long ID { get; set; }
 
-    [Required]
-    public long CategoryID { get; set; }
+    public long? CategoryID { get; set; }
 
     [MaxLength(100)]
     public string Name { get; set; }
@@ -46,5 +45,14 @@ public class Tool
 
 
     [ForeignKey(nameof(CategoryID))]
-    public virtual ToolCategory Category { get; set; }
+    public virtual Category Category { get; set; }
+
+    [InverseProperty(nameof(Embedding.Tool))]
+    public virtual Embedding Embedding { get; set; }
+
+    [InverseProperty(nameof(Like.Tool))]
+    public virtual ICollection<Like> Likes { get; set; }
+
+    [InverseProperty(nameof(Comment.Tool))]
+    public virtual ICollection<Comment> Comments { get; set; }
 }

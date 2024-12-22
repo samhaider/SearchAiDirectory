@@ -3,7 +3,7 @@
 [AllowAnonymous]
 [Area("Website")]
 [Route("[action]")]
-public class SharedController(IToolService toolService) : Controller
+public class SharedController(IToolService toolService, ICategoryService categoryService) : Controller
 {
     [OutputCache(PolicyName = "GlobalCachePolicy")][HttpGet] public IActionResult Error() => View();
     [OutputCache(PolicyName = "GlobalCachePolicy")][HttpGet] public IActionResult NoJs() => View();
@@ -41,7 +41,7 @@ public class SharedController(IToolService toolService) : Controller
         }
 
         var toolsTask = toolService.GetAllTools();
-        var categoriesTask = toolService.GetActiveCategories();
+        var categoriesTask = categoryService.GetActiveCategories();
         await Task.WhenAll(toolsTask, categoriesTask);
 
         foreach (var tool in toolsTask.Result)

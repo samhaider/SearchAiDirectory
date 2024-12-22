@@ -1,49 +1,51 @@
 ﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "Login";
-    ViewData["Meta-Description"] = "Log in to GetDigitalContent and access your account to market your brand. Secure and easy login process for existing members.";
-    ViewData["Meta-Keywords"] = "login, GetDigitalContent, account, connect, friends, share, updates, community, secure, existing, member";
+    ViewData["Meta-Description"] = "Log in to SearchAiDirectory and access your account to market your brand. Secure and easy login process for existing members.";
+    ViewData["Meta-Keywords"] = "login, SearchAiDirectory, account, connect, friends, share, updates, community, secure, existing, member";
 }
 
-<div class="col-12 col-md-6 col-sm-12 my-5">
+<div class="w-full max-w-md mx-auto my-10">
 
     <!-- Heading -->
-    <h1 class="display-4 mb-5">Login</h1>
+    <h1 class="text-4xl font-bold mb-5">Login</h1>
 
     <!-- Form -->
-    <form method="post" action="/Login" class="needs-validation">
+    <form method="post" action="/Login" class="space-y-6">
 
-        <div class="form-group mb-3">
-            <label class="form-label">Email Address</label>
-            <input class="form-control" type="email" id="email" name="email" placeholder="name@address.com" required />
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" type="email" id="email" name="email" placeholder="name@address.com" required />
         </div>
 
-        <div class="form-group mb-3">
-            <div class="row">
-                <div class="col"><label class="form-label">Password</label></div>
-                <div class="col-auto"><a href="/ForgotPassword" class="form-text small text-warning">Forgot password?</a></div>
+        <div class="mb-4">
+            <div class="flex justify-between">
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+                <a href="/ForgotPassword" class="text-sm text-yellow-600 hover:text-yellow-500">Forgot password?</a>
             </div>
-            <div class="input-group input-group-merge">
-                <input class="form-control" type="password" id="password" name="password" placeholder="Enter your password" required />
-                <button class="input-group-text" type="button" onclick="ShowPassword();"><i id="eye-icon" class="bi bi-eye"></i></button>
+            <div class="relative mt-1">
+                <input class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" type="password" id="password" name="password" placeholder="Enter your password" required />
+                <button class="absolute inset-y-0 right-0 px-3 py-2" type="button" onclick="ShowPassword();">
+                    <i id="eye-icon" class="bi bi-eye"></i>
+                </button>
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="form-check-label me-3">Remember Me</label>
-            @Html.CheckBox("persist", new { @class = "form-check-input" })
+        <div class="flex items-center">
+            <input id="persist" name="persist" type="checkbox" class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded">
+            <label for="persist" class="ml-2 block text-sm text-gray-900">Remember Me</label>
         </div>
 
-        <button type="submit" class="btn btn-lg w-100 btn-warning my-3">Sign in</button>
+        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">Sign in</button>
     </form>
 
-    <div class="form-group">
-        <label class="h3 text-center text-danger m-0 p-0">@ViewBag.LoginMessage</label>
+    <div class="mt-6 text-center">
+        <label class="block text-sm font-medium text-red-600">@ViewBag.LoginMessage</label>
     </div>
 
-    <div class="text-center">
-        <small class="text-light text-center">
-            Don't have an account yet? <a class="mx-2" href="/Signup">Sign up</a>
+    <div class="mt-6 text-center">
+        <small class="text-gray-500">
+            Don't have an account yet? <a class="text-yellow-600 hover:text-yellow-500" href="/Signup">Sign up</a>
         </small>
     </div>
 </div>
@@ -59,8 +61,8 @@
 
             // toggle the eye slash icon
             const togglePassword = document.getElementById('eye-icon');
-            togglePassword.classList.toggle('fe-eye');
-            togglePassword.classList.toggle('fe-eye-off');
+            togglePassword.classList.toggle('bi-eye');
+            togglePassword.classList.toggle('bi-eye-slash');
         }
     </script>
 }

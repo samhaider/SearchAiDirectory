@@ -4,6 +4,7 @@ global using Microsoft.IdentityModel.Tokens;
 global using SearchAiDirectory.Shared.Data;
 global using SearchAiDirectory.Shared.Models;
 global using SearchAiDirectory.Shared.ThirdPartyService;
+global using SearchAiDirectory.Shared.Utilities;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.IdentityModel.Tokens.Jwt;

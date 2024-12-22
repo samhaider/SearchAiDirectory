@@ -1,6 +1,6 @@
 ﻿namespace SearchAiDirectory.Shared.Models;
 
-public class ToolCategory
+public class Category
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

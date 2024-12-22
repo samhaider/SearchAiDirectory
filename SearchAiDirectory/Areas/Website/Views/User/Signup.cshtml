@@ -2,77 +2,51 @@
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Home Page";
-    ViewData["Meta-Description"] = "Sign up for GetDigitalContent and join to manage your brand. Create your account and create a ai-powered brand. Easy and quick registration process";
-    ViewData["Meta-Keywords"] = "sign up, GetDigitalContent, join, brand management, create, account, connect, share, easy, quick, registration process";
+    ViewData["Meta-Description"] = "Sign up for SearchAiDirectory and join to manage your brand. Create your account and create a ai-powered brand. Easy and quick registration process";
+    ViewData["Meta-Keywords"] = "sign up, SearchAiDirectory, join, brand management, create, account, connect, share, easy, quick, registration process";
 }
 
-
-<div class="col-12 col-md-6 col-sm-12 my-5">
+<div class="w-full max-w-md mx-auto my-10">
 
     <!-- Heading -->
-    <h1 class="display-4 mb-3">Sign up</h1>
+    <h1 class="text-4xl font-bold mb-3">Sign up</h1>
 
     <!-- Subheading -->
-    <p class="text-warning mb-5">Free To SignUp. No <i class="bi bi-credit-card"></i> needed.</p>
+    <p class="text-yellow-500 mb-5">Free To SignUp. No <i class="bi bi-credit-card"></i> needed.</p>
 
     <!-- Form -->
-    <form method="post" action="/Signup" class="needs-validation">
+    <form method="post" action="/Signup" class="space-y-6">
 
         <input type="hidden" id="ID" name="ID" />
-
-        <div class="form-group mb-3">
-            <label class="form-label">User Type</label>
-            <div class="container">
-                <div class="row">
-                    <div class="form-check col-5 mx-3 card card-border text-center py-3">
-                        <label class="form-check-label" for="OneBrand">
-                            <div class="display-4"></div>
-                            <h3>User</h3>
-                            <h5>Help us rate the tools</h5>
-                        </label>
-                        <input class="form-check-inline ms-3" type="radio" id="RoleID" name="RoleID" value="1" />
-                    </div>
-                    <div class="form-check col-6 card card-border text-center py-3">
-                        <label class="form-check-label" for="MultipleBrand">
-                            <div class="display-4 fe fe-lg fe-grid"></div>
-                            <h3>Register Tool</h3>
-                            <h5>Register Your Ai Tool</h5>
-                        </label>
-                        <input class="form-check-inline ms-3" type="radio" id="RoleID" name="RoleID" value="2" />
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <input type="hidden" id="ID" name="ID" value="@Model.ID" />
         <input type="hidden" id="TimeZone" name="TimeZone" />
 
-        <div class="form-group mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" id="Name" name="Name" class="form-control" placeholder="full name" required />
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <input type="text" id="Name" name="Name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" placeholder="full name" required />
         </div>
 
-        <div class="form-group mb-3">
-            <label class="form-label">Email Address</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="name@address.com" required />
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" placeholder="name@address.com" required />
         </div>
 
-        <div class="form-group mb-5">
-            <div class="row">
-                <div class="col"><label class="form-label">Password</label></div>
-                <div class="col-auto"><a href="/ForgotPassword" class="form-text small text-warning">Forgot password?</a></div>
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <div class="relative mt-1">
+                <input type="password" id="password" name="password" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" placeholder="Enter your password" required />
+                <button class="absolute inset-y-0 right-0 px-3 py-2" type="button" onclick="ShowPassword();">
+                    <i id="eye-icon" class="bi bi-eye"></i>
+                </button>
             </div>
-            <div class="input-group input-group-merge">
-                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required />
-                <button class="input-group-text" type="button" onclick="ShowPassword();"><i id="eye-icon" class="bi bi-eye"></i></button>
-            </div>
         </div>
 
-        <button type="submit" class="btn w-100 btn-warning mb-3">Sign up</button>
+        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">Sign up</button>
 
-        <div class="text-center">
-            <small class="text-light text-center">
-                Already have an account? <a href="/Login">Log in</a>.
+        <div class="mt-6 text-center">
+            <small class="text-gray-500">
+                Already have an account? <a href="/Login" class="text-yellow-600 hover:text-yellow-500">Log in</a>.
             </small>
         </div>
     </form>
@@ -194,8 +168,8 @@
 
             // toggle the eye slash icon
             const togglePassword = document.getElementById('eye-icon');
-            togglePassword.classList.toggle('fe-eye');
-            togglePassword.classList.toggle('fe-eye-off');
+            togglePassword.classList.toggle('bi-eye');
+            togglePassword.classList.toggle('bi-eye-slash');
         }
     </script>
 }

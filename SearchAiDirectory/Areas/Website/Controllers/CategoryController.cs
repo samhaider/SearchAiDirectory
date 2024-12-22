@@ -2,19 +2,19 @@
 
 [AllowAnonymous]
 [Area("Website")]
-public class CategoryController(IToolService toolService) : Controller
+public class CategoryController(ICategoryService categoryService) : Controller
 {
     [HttpGet("/categories")]
     public async Task<IActionResult> Index()
     {
-        var categories = await toolService.GetActiveCategories();
+        var categories = await categoryService.GetActiveCategories();
         return View(categories);
     }
 
     [HttpGet("/tool/category/{slug}")]
     public async Task<IActionResult> Category(string slug)
     {
-        var category = await toolService.GetCategoryBySlug(slug);
+        var category = await categoryService.GetCategoryBySlug(slug);
         return View(category);
     }
 }

@@ -17,6 +17,7 @@ public static class ScrapeWebsite
         var allRows = LoadCsv();
 
         var toolService = BgUtil.GetServices().GetRequiredService<IToolService>();
+        var categoryService = BgUtil.GetServices().GetRequiredService<ICategoryService>();
         foreach (var tool in allRows)
         {
             var toolName = tool.Name.Trim().Normalize();
@@ -39,7 +40,7 @@ public static class ScrapeWebsite
             var metaKeywords = await websiteAgent.DirectOpenAiResponse("Give me a meta keywords less than 140 character in comma delimited format for this tool. no pre context or no post context is needed.");
             var pricingModel = await websiteAgent.DirectOpenAiResponse("Give me the pricing model of this tool in 1 to 3 words, like Free, Freemium, Paid only, Trial with Subscription, if unknown, response with Unknown. no pre context or no post context is needed.");
 
-            var allCategories = await toolService.GetAllCategories();
+            var allCategories = await categoryService.GetAllCategories();
             var categoryList = string.Join("\n", allCategories.Select(s => $"ID:{s.ID} |Name:{s.Name}").ToArray());
 
             var prompt = $"Create a category for the ai tool with the following details:\nName: {tool.Name}\nDescription: {tool.Description}" +
@@ -50,16 +51,15 @@ public static class ScrapeWebsite
             string categoryName = categoryResponse.Replace("Category:", "").Replace("\'", "").Replace("\"", "").Replace(".", "").Replace("`", "").Trim().Normalize();
             string categorgyMetaDescription = await categoryAgent.DirectOpenAiResponse("Create a meta description for this category without any context. the meta description should be less than 140 characters.");
             string categorgyMetaKeywords = await categoryAgent.DirectOpenAiResponse("Create a comma delimited meta keywords for this category without any context. the meta keywords should be less than 140 characters.");
-            long categoryID = !await toolService.CategoryExists(categoryName)
-                ? await toolService.AddCategory(
-                    new ToolCategory
+            long categoryID = !await categoryService.CategoryExists(categoryName)
+                ? await categoryService.AddCategory(
+                    new Category
                     {
                         Name = categoryName,
-                        Slug = RegexHelper.TextToSlug(categoryName),
                         MetaDescription = categorgyMetaDescription.Trim().Normalize(),
                         MetaKeywords = categorgyMetaKeywords.Trim().Normalize()
                     })
-                : await toolService.GetCategoryIDByName(categoryName);
+                : await categoryService.GetCategoryIDByName(categoryName);
 
             var toolID = await toolService.AddTool(new Tool
             {

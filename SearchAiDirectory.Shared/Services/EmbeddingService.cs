@@ -21,7 +21,7 @@ public class EmbeddingService(ApplicationDataContext db) : IEmbeddingService
         var newEmbedding = await OpenAiService.GetEmbedding(combinedText);
         if (newEmbedding is null) return;
 
-        var embedding = new ToolEmbedding
+        var embedding = new Embedding
         {
             ToolID = tool.ID,
             EmbeddingCode = JsonSerializer.Serialize(newEmbedding),
