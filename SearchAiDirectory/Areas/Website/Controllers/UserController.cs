@@ -44,11 +44,6 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
         await outputCache.EvictByTagAsync("global-cache", default);
         await auth.Authenticate(user, persist);
 
-        TempData.Clear();
-        TempData["UserID"] = user.ID.ToString();
-        TempData["Name"] = $"{user.Name}";
-        TempData["TimeZone"] = user.TimeZone;
-
         return View();
     }
 

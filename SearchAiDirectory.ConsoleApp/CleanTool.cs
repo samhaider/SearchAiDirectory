@@ -14,6 +14,10 @@ public static class CleanTools
         var allRows = LoadData.LoadCsv();
         var tools = await toolService.GetAllTools();
 
+        foreach (var tool in tools)
+            await embeddingService.CreateEmbeddingRecord(tool.ID);
+
+
         //var categoryTools = tools.Where(w => !w.CategoryID.HasValue).ToList();
         //foreach (var tool in categoryTools)
         //{
@@ -58,27 +62,26 @@ public static class CleanTools
         //    if (categoryID != 0) await toolService.ChangeCategory(tool.ID, categoryID);
         //}
 
-        var websiteTools = tools.Where(w => !w.Website.Contains("?ref=")).ToList();
-        foreach (var tool in websiteTools)
-        {
-            var orgWebsite = allRows.Where(w => w.Name == tool.Name).Select(s => s.DetailPage).FirstOrDefault();
+        //var websiteTools = tools.Where(w => !w.Website.Contains("?ref=")).ToList();
+        //foreach (var tool in websiteTools)
+        //{
+        //    var orgWebsite = allRows.Where(w => w.Name == tool.Name).Select(s => s.DetailPage).FirstOrDefault();
 
-            var link = await ExtractLink(orgWebsite);
-            if (!string.IsNullOrEmpty(link))
-            {
-                tool.Website = await WebScraper.GetFinalUrl(link);
-                if (IsValidUrl(tool.Website))
-                {
-                    tool.Website = GetBaseUrl(tool.Website);
+        //    var link = await ExtractLink(orgWebsite);
+        //    if (!string.IsNullOrEmpty(link))
+        //    {
+        //        tool.Website = await WebScraper.GetFinalUrl(link);
+        //        if (IsValidUrl(tool.Website))
+        //        {
+        //            tool.Website = GetBaseUrl(tool.Website);
 
-                    if (tool.Website.EndsWith("/"))
-                        tool.Website += "?ref=searchaidirectory.com";
-                    else
-                        tool.Website += "/?ref=searchaidirectory.com";
-                    await toolService.UpdateTool(tool);
-                }
-            }
-        }
+        //            if (tool.Website.EndsWith("/"))
+        //                tool.Website += "?ref=searchaidirectory.com";
+        //            else
+        //                tool.Website += "/?ref=searchaidirectory.com";
+        //            await toolService.UpdateTool(tool);
+        //        }
+        //    }
 
         //var validImageExtensions = new List<string> { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".webp", ".tiff", ".ico", ".heic", ".avif" };
         //var imageTools = tools.Where(w =>
@@ -112,8 +115,6 @@ public static class CleanTools
         //        await toolService.UpdateToolImageUrl(tool.ID, azImageUrl);
         //    }
         //}
-
-
 
         //var allCategories = await toolService.GetAllCategories();
         //var categoryList = string.Join("\n", allCategories.Select(s => $"ID:{s.ID} |Name:{s.Name}").ToArray());
@@ -190,7 +191,6 @@ public static class CleanTools
             return string.Empty;
         }
     }
-
     public static async Task<string> ExtractImageUrl(string siteUrl)
     {
         try

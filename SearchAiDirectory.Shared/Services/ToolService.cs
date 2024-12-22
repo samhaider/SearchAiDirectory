@@ -39,6 +39,7 @@ public class ToolService(ApplicationDataContext db) : IToolService
         .Include(i => i.Category)
         .Include(i => i.Likes)
         .Include(i => i.Comments).ThenInclude(i => i.User)
+        .Include(i => i.Embedding)
         .SingleOrDefaultAsync();
 
     public async Task<long> AddTool(Tool newTool)

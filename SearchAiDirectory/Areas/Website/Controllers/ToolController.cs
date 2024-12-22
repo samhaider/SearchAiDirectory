@@ -16,7 +16,10 @@ public class ToolController(IToolService toolService, IEmbeddingService embeddin
     [HttpGet("/tool/{slug}")]
     public async Task<IActionResult> Tool(string slug)
     {
-        var model = new ToolPageModel(){ Tool = await toolService.GetToolBySlug(slug) };
+        var tool = await toolService.GetToolBySlug(slug);
+        var relatedTools = await embeddingService.Get3RelatedTools(tool.ID, tool.Embedding.EmbeddingCode);
+
+        var model = new ToolPageModel() { Tool = tool, RelatedTools = relatedTools };
         if (model == null) return NotFound();
 
         // Check if the current user has liked this tool
@@ -49,9 +52,10 @@ public class ToolController(IToolService toolService, IEmbeddingService embeddin
         {
             var userId = long.Parse(httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var result = await likeService.ToggleLike(userId, toolId);
-            
-            return Json(new { 
-                success = true, 
+
+            return Json(new
+            {
+                success = true,
                 isLiked = result.IsLiked,
                 likeCount = result.LikeCount
             });
@@ -80,7 +84,7 @@ public class ToolController(IToolService toolService, IEmbeddingService embeddin
                 Content = content,
                 Approve = true // Auto-approve comments for now
             };
-            
+
             await commentService.AddComment(comment);
             return Json(new { success = true });
         }
