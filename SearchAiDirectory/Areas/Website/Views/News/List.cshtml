@@ -1,0 +1,92 @@
+﻿@model IEnumerable<News>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Latest AI News";
+    ViewData["MetaDescription"] = "Stay updated with the latest AI tools and technology news";
+    ViewData["MetaKeywords"] = "AI news, artificial intelligence news, AI tools, technology news";
+}
+
+<div class="space-y-12">
+    <!-- Hero Section - Latest News -->
+    @if (Model.Any())
+    {
+        var latestNews = Model.First();
+        <div class="relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <a href="/news/@latestNews.Slug" class="block">
+                <div class="relative h-96">
+                    @if (!string.IsNullOrEmpty(latestNews.ImageUrl))
+                    {
+                        <img src="@latestNews.ImageUrl" alt="@latestNews.Title" class="w-full h-full object-cover" />
+                    }
+                    else
+                    {
+                        <div class="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-600"></div>
+                    }
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/50 to-transparent">
+                        <div class="absolute bottom-0 p-6 text-white">
+                            <div class="mb-2">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500 text-white">
+                                    Latest News
+                                </span>
+                            </div>
+                            <h1 class="text-3xl font-bold mb-2">@latestNews.Title</h1>
+                            <p class="text-gray-200 mb-4 line-clamp-2">@latestNews.MetaDescription</p>
+                            <div class="flex items-center text-sm">
+                                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                @latestNews.Created.ToString("MMMM dd, yyyy")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- News Grid -->
+        @if (Model.Count() > 1)
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach (var news in Model.Skip(1))
+                {
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                        <a href="/news/@news.Slug" class="block">
+                            <div class="relative h-48">
+                                @if (!string.IsNullOrEmpty(news.ImageUrl))
+                                {
+                                    <img src="@news.ImageUrl" alt="@news.Title" class="w-full h-full object-cover" />
+                                }
+                                else
+                                {
+                                    <div class="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-600"></div>
+                                }
+                            </div>
+                            <div class="p-6">
+                                <h2 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">@news.Title</h2>
+                                <p class="text-gray-600 mb-4 line-clamp-2">@news.MetaDescription</p>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    @news.Created.ToString("MMMM dd, yyyy")
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-100 mb-4">
+                <svg class="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">No News Available</h2>
+            <p class="text-gray-600">Check back later for the latest updates and news.</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SearchAiDirectory.Function": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7262",
+      "launchBrowser": false
+    }
+  }
+}

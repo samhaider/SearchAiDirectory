@@ -1,6 +1,4 @@
-﻿using System.Numerics.Tensors;
-
-namespace SearchAiDirectory.Shared.Services;
+﻿namespace SearchAiDirectory.Shared.Services;
 
 public interface IEmbeddingService
 {

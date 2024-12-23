@@ -78,6 +78,7 @@ public class Program
         builder.Services.AddTransient<ICategoryService, CategoryService>();
         builder.Services.AddTransient<ILikeService, LikeService>();
         builder.Services.AddTransient<ICommentService, CommentService>();
+        builder.Services.AddTransient<INewsService, NewsService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

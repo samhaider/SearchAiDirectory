@@ -17,6 +17,9 @@ public class ApplicationDataContext(DbContextOptions options) : DbContext(option
     public DbSet<Like> Likes => Set<Like>();
     public DbSet<Comment> Comments => Set<Comment>();
 
+    public DbSet<News> News => Set<News>();
+    public DbSet<NewsEmbedding> NewsEmbeddings => Set<NewsEmbedding>();
+
 
     public DbSet<AppLog> AppLogs => Set<AppLog>();
 }

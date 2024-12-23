@@ -11,7 +11,7 @@ public static class AzureStorageService
     public static async Task<Stream> GetBlobFileStream(BlobContainers container, string fileName)
     {
         string containerName = container == BlobContainers.tools ? nameof(BlobContainers.tools) :
-            container == BlobContainers.blog ? nameof(BlobContainers.blog) :
+            container == BlobContainers.news ? nameof(BlobContainers.news) :
             string.Empty;
 
         if (string.IsNullOrEmpty(containerName) || string.IsNullOrEmpty(fileName)) return null;
@@ -24,7 +24,7 @@ public static class AzureStorageService
     public static async Task<string> UploadBlobFiles(BlobContainers container, string fileName, byte[] file)
     {
         string containerName = container == BlobContainers.tools ? nameof(BlobContainers.tools) :
-            container == BlobContainers.blog ? nameof(BlobContainers.blog) :
+            container == BlobContainers.news ? nameof(BlobContainers.news) :
             string.Empty;
 
         if (string.IsNullOrEmpty(containerName) || string.IsNullOrEmpty(fileName)) return null;
@@ -120,5 +120,5 @@ public static class AzureStorageService
 public enum BlobContainers
 {
     tools,
-    blog
+    news
 }
