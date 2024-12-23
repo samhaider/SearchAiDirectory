@@ -20,7 +20,7 @@
 
     <!-- Form -->
     <form method="post" action="/Signup" class="space-y-6">
-
+        @Html.AntiForgeryToken()
         <input type="hidden" id="ID" name="ID" />
 
         <input type="hidden" id="ID" name="ID" value="@Model.ID" />

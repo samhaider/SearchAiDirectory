@@ -18,6 +18,7 @@
 
     <!-- Form -->
     <form method="post" action="/ConfirmCode" class="space-y-6" novalidate>
+        @Html.AntiForgeryToken()
         <input type="hidden" id="email" name="email" value="@ViewBag.Email" />
 
         <div class="mb-4">
