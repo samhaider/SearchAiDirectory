@@ -14,6 +14,10 @@
     <!-- Subheading -->
     <p class="text-yellow-500 mb-5">Free To SignUp. No <i class="bi bi-credit-card"></i> needed.</p>
 
+    <div class="mt-6 text-center">
+        <label class="block text-sm font-medium text-red-600">@ViewBag.Message</label>
+    </div>
+
     <!-- Form -->
     <form method="post" action="/Signup" class="space-y-6">
 
@@ -84,7 +88,7 @@
         var onloadCallback = function () {
 
             grecaptcha.render('html_element', {
-                'sitekey': '6Ld7PRIjAAAAAG31jBGEdU3KKGUZyXBV2HSkwOp7',
+                'sitekey': '6LfzjKMqAAAAAKwjEGUMwdhhlI_Ad4QNMtsgd9n-',
                 'callback': function (token) {
                     recaptcha_verified = true;
                 },

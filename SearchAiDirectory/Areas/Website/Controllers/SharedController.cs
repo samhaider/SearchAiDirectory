@@ -3,13 +3,13 @@
 [AllowAnonymous]
 [Area("Website")]
 [Route("[action]")]
+[OutputCache(PolicyName = "GlobalCachePolicy")]
 public class SharedController(IToolService toolService, ICategoryService categoryService) : Controller
 {
-    [OutputCache(PolicyName = "GlobalCachePolicy")][HttpGet] public IActionResult Error() => View();
-    [OutputCache(PolicyName = "GlobalCachePolicy")][HttpGet] public IActionResult NoJs() => View();
+    [HttpGet] public IActionResult Error() => View();
+    [HttpGet] public IActionResult NoJs() => View();
 
     //Sitemap
-    [OutputCache(PolicyName = "GlobalCachePolicy")]
     [HttpGet]
     [Route("/sitemap")]
     [Route("/sitemap.xml")]
@@ -69,7 +69,6 @@ public class SharedController(IToolService toolService, ICategoryService categor
     }
 
     //Robots File
-    [OutputCache(PolicyName = "GlobalCachePolicy")]
     [HttpGet("/robots.txt")]
     public ContentResult RobotsTxt()
     {

@@ -10,7 +10,7 @@ public class ApplicationDataContext(DbContextOptions options) : DbContext(option
 
     public DbSet<User> Users => Set<User>();
     public DbSet<UserCode> UserCodes => Set<UserCode>();
-    
+
     public DbSet<Tool> Tools => Set<Tool>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Embedding> Embeddings => Set<Embedding>();

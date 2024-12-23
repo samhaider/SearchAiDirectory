@@ -6,13 +6,17 @@ public interface ILikeService
     Task<(bool IsLiked, long LikeCount)> ToggleLike(long userId, long toolId);
 }
 
-public class LikeService(ApplicationDataContext db) : ILikeService
+public class LikeService(IDbContextFactory<ApplicationDataContext> dbContextFactory) : ILikeService
 {
     public async Task<bool> HasUserLikedTool(long userId, long toolId)
-        => await db.Likes.AnyAsync(l => l.UserID == userId && l.ToolID == toolId);
+    {
+        using var db = dbContextFactory.CreateDbContext();
+        return await db.Likes.AnyAsync(l => l.UserID == userId && l.ToolID == toolId);
+    }
 
     public async Task<(bool IsLiked, long LikeCount)> ToggleLike(long userId, long toolId)
     {
+        using var db = dbContextFactory.CreateDbContext();
         var tool = await db.Tools.FindAsync(toolId) ?? throw new Exception("Tool not found");
         var existingLike = await db.Likes.FirstOrDefaultAsync(l => l.UserID == userId && l.ToolID == toolId);
 

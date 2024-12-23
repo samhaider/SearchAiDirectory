@@ -10,6 +10,14 @@
     <!-- Heading -->
     <h1 class="text-4xl font-bold mb-5">Login</h1>
 
+    <div class="mt-6 text-center">
+        <label class="block text-sm font-medium text-red-600">@ViewBag.LoginMessage</label>
+    </div>
+    <div class="mt-6 text-center">
+        <label class="block text-sm font-medium text-red-600">@ViewBag.Message</label>
+    </div>
+
+
     <!-- Form -->
     <form method="post" action="/Login" class="space-y-6">
 
@@ -38,10 +46,6 @@
 
         <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">Sign in</button>
     </form>
-
-    <div class="mt-6 text-center">
-        <label class="block text-sm font-medium text-red-600">@ViewBag.LoginMessage</label>
-    </div>
 
     <div class="mt-6 text-center">
         <small class="text-gray-500">

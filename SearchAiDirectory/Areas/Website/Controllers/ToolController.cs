@@ -2,6 +2,7 @@
 
 [AllowAnonymous]
 [Area("Website")]
+[OutputCache(PolicyName = "GlobalCachePolicy")]
 public class ToolController(IToolService toolService, IEmbeddingService embeddingService, ILikeService likeService, ICommentService commentService, IHttpContextAccessor httpContextAccessor) : Controller
 {
     private readonly HttpContext httpContext = httpContextAccessor.HttpContext;
@@ -13,14 +14,17 @@ public class ToolController(IToolService toolService, IEmbeddingService embeddin
         return View(tools);
     }
 
+    [HttpGet] public IActionResult ToolNotFound() => View();
+
     [HttpGet("/tool/{slug}")]
     public async Task<IActionResult> Tool(string slug)
     {
         var tool = await toolService.GetToolBySlug(slug);
+        if (tool is null) return RedirectToAction("ToolNotFound");
+
         var relatedTools = await embeddingService.Get3RelatedTools(tool.ID, tool.Embedding.EmbeddingCode);
 
         var model = new ToolPageModel() { Tool = tool, RelatedTools = relatedTools };
-        if (model == null) return NotFound();
 
         // Check if the current user has liked this tool
         if (httpContext.User.Identity.IsAuthenticated)
@@ -51,13 +55,13 @@ public class ToolController(IToolService toolService, IEmbeddingService embeddin
         try
         {
             var userId = long.Parse(httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var result = await likeService.ToggleLike(userId, toolId);
+            var (IsLiked, LikeCount) = await likeService.ToggleLike(userId, toolId);
 
             return Json(new
             {
                 success = true,
-                isLiked = result.IsLiked,
-                likeCount = result.LikeCount
+                isLiked = IsLiked,
+                likeCount = LikeCount
             });
         }
         catch (Exception ex)

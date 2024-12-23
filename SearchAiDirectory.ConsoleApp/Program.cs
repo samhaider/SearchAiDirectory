@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SearchAiDirectory.Shared.Data;
-using SearchAiDirectory.Shared.Services;
 
 namespace SearchAiDirectory.ConsoleApp;
 
@@ -11,7 +10,7 @@ public class Program
         //await ScrapeWebsite.Scrape();
         await CleanTools.Clean();
 
-        
+
         //var services = BgUtil.GetServices();
         //using var scope = services.CreateScope();
         //var toolService = scope.ServiceProvider.GetRequiredService<IToolService>();

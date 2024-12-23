@@ -55,20 +55,29 @@ public class Program
         //Adding services to the container
         builder.Services.AddHttpContextAccessor();
 
-        builder.Services.AddDbContext<ApplicationDataContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("Default"),
-            sqlServerOptionsAction: sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(1), errorNumbersToAdd: null))
-            .UseLazyLoadingProxies(false)
-            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
-        builder.Services.AddTransient<IUserService, UserService>();        
+        builder.Services.AddDbContextFactory<ApplicationDataContext>(options =>
+        {
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString("Default"),
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(1), errorNumbersToAdd: null);// Retry on failure for transient faults
+                    sqlOptions.MaxBatchSize(100);// Max batch size for better performance with bulk operations
+                    sqlOptions.CommandTimeout(30); // Command timeout for long-running queries in seconds
+                });
+
+            options.UseLazyLoadingProxies(false);// Disable lazy loading to avoid N+1 query issues
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);// Globally disable tracking for better read performance on large queries
+        });
+
+        builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<IUserAuthenticator, UserAuthenticator>();
         builder.Services.AddTransient<IEmbeddingService, EmbeddingService>();
         builder.Services.AddTransient<IToolService, ToolService>();
         builder.Services.AddTransient<ICategoryService, CategoryService>();
         builder.Services.AddTransient<ILikeService, LikeService>();
         builder.Services.AddTransient<ICommentService, CommentService>();
-        builder.Services.AddSingleton(new JWTokenService(builder.Configuration["WebsiteURL"]));
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

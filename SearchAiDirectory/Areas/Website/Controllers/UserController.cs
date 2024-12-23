@@ -41,18 +41,16 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
             return View();
         }
 
+        if (!user.EmailConfirmed)
+        {
+            ViewBag.LoginMessage = "Could you please confirm your email.";
+            return View();
+        }
+
         await outputCache.EvictByTagAsync("global-cache", default);
         await auth.Authenticate(user, persist);
 
         return View();
-    }
-
-    [HttpGet]
-    public JsonResult GetUserAvatar()
-    {
-        var userID = Convert.ToInt64(httpContext.User.Claims.Where(c => c.Type == "nameid").First().Value);
-        var user = userService.GetUserByID(userID).Result;
-        return Json(user.Avatar);
     }
 
     [HttpGet]
@@ -66,8 +64,8 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     public async Task<IActionResult> Signup(User newUser)
     {
         var signupCompleted = await userService.SignUp(newUser);
-        //await emailService.SendWelcomeEmail(newUser.Email, $"{newUser.Name}");
-        //await emailService.ListSignUp(newUser, await roleService.GetAllRoles());
+        await SendGridService.SendWelcomeEmail(newUser.Email, newUser.Name);
+        await SendGridService.AddContactToList(newUser.Email, newUser.Name);
         return signupCompleted ? Redirect("login") : View(newUser);
     }
 
@@ -83,8 +81,9 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
             return View();
         }
 
-        //string code = await userService.CreateResetPasswordCode(email);
-        //await emailService.SendResetCodeEmail(email, code);
+        string code = await userService.CreateEmailCode(email);
+        var user = await userService.GetUserByEmail(email);
+        await SendGridService.SendPasswordResetEmail(user.Email, user.Name, code);
         return RedirectToAction("EnterCode", routeValues: new { email });
     }
 
@@ -106,30 +105,64 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
 
     [HttpPost]
     public async Task<IActionResult> ConfirmCode(string email, string code)
-        => await userService.ConfirmEmailCode(email, code)
-        ? RedirectToAction("ResetPassword", routeValues: new { email })
-        : View();
+    {
+        if (!await userService.EmailExisits(email))
+        {
+            ViewBag.Message = "Invalid Email Address.";
+            return RedirectToAction("EnterCode", new { email });
+        }
+
+        return await userService.ConfirmEmailCode(email, code)
+            ? RedirectToAction("ResetPassword", routeValues: new { email })
+            : View();
+    }
 
     [HttpGet]
-    public IActionResult ResetPassword(string email)
+    public async Task<IActionResult> ResetPassword(string email)
     {
+        if (string.IsNullOrEmpty(email) || !await userService.EmailExisits(email))
+            return RedirectToAction("Login");
+
         ViewBag.Email = email;
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> ResetPassword(string email, string password)
-        => await userService.ChangePassword(email, password)
-        ? RedirectToAction("Login")
-        : RedirectToAction("ResetPassword", new { email });
+    {
+        if (await userService.ChangePassword(email, password))
+        {
+            ViewBag.LoginMessage = "Password Changed.";
+            var user = await userService.GetUserByEmail(email);
+            await SendGridService.SendPasswordChangedEmail(user.Email, user.Name);
+            return RedirectToAction("Login");
+        }
+        else
+        {
+            ViewBag.Message = "Unable to change password, please contact support at support@searchaidirectory.com";
+            return RedirectToAction("ResetPassword", new { email });
+        }
+    }
 
     [HttpPost]
     public IActionResult CheckEmailExisit(string email)
         => Json(userService.EmailExisits(email).Result);
 
-    [HttpGet]
+    [HttpGet("/confirmemail/{email}")]
     public async Task<IActionResult> ConfirmEmail(string email)
-        => await userService.ConfirmEmail(email)
-        ? View("EmailConfirmed")
-        : Redirect("login");
+    {
+        if (string.IsNullOrEmpty(email)) return RedirectToAction("Login");
+
+        return await userService.ConfirmEmail(email)
+            ? View("EmailConfirmed")
+            : Redirect("login");
+    }
+
+    [HttpGet]
+    public JsonResult GetUserAvatar()
+    {
+        var userID = Convert.ToInt64(httpContext.User.Claims.Where(c => c.Type == "nameid").First().Value);
+        var user = userService.GetUserByID(userID).Result;
+        return Json(user.Avatar);
+    }
 }

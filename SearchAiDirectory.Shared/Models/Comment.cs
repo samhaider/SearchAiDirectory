@@ -4,7 +4,7 @@ public class Comment
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long ID { get; set; }
-    
+
     [Required]
     public long ToolID { get; set; }
 

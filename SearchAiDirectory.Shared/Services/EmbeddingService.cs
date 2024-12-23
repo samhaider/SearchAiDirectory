@@ -9,10 +9,11 @@ public interface IEmbeddingService
     Task<IList<Tool>> Get3RelatedTools(long toolID, string toolEmbeddingCode);
 }
 
-public class EmbeddingService(ApplicationDataContext db) : IEmbeddingService
+public class EmbeddingService(IDbContextFactory<ApplicationDataContext> dbContextFactory) : IEmbeddingService
 {
     private async Task<KeyValuePair<long, float>[]> SearchEmbeddings(float[] queryEmbeddingCode, int topN)
     {
+        using var db = dbContextFactory.CreateDbContext();
         var embedding = await db.Embeddings.ToListAsync();
 
         return embedding.Select(embeddingCode => new KeyValuePair<long, float>(
@@ -27,6 +28,7 @@ public class EmbeddingService(ApplicationDataContext db) : IEmbeddingService
 
     public async Task CreateEmbeddingRecord(long toolID)
     {
+        using var db = dbContextFactory.CreateDbContext();
         if (await db.Embeddings.AnyAsync(a => a.ToolID == toolID)) return;
 
         var tool = await db.Tools.Include(i => i.Category).SingleOrDefaultAsync(s => s.ID == toolID);
@@ -48,6 +50,7 @@ public class EmbeddingService(ApplicationDataContext db) : IEmbeddingService
 
     public async Task<IList<Tool>> EmbeddingSearchTools(float[] queryEmbeddingCode, int topN)
     {
+        using var db = dbContextFactory.CreateDbContext();
         var result = await SearchEmbeddings(queryEmbeddingCode, topN);
         var relatedTools = result.Select(s => s.Key).ToList();
         var tools = await db.Tools.Where(w => relatedTools.Contains(w.ID)).ToListAsync();
@@ -58,6 +61,7 @@ public class EmbeddingService(ApplicationDataContext db) : IEmbeddingService
 
     public async Task<IList<Tool>> Get3RelatedTools(long toolID, string toolEmbeddingCode)
     {
+        using var db = dbContextFactory.CreateDbContext();
         var queryEmbeddingCode = JsonSerializer.Deserialize<float[]>(toolEmbeddingCode);
 
         var result = await SearchEmbeddings(queryEmbeddingCode, 4);
