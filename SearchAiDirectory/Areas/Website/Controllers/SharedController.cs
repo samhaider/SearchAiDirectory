@@ -58,7 +58,7 @@ public class SharedController(IToolService toolService, ICategoryService categor
         {
             XElement urlElement =
             new(xmlns + "url",
-                new XElement(xmlns + "loc", new Uri("https://searchaidirectory.com/tool/category/" + category.Slug).AbsoluteUri),
+                new XElement(xmlns + "loc", new Uri("https://searchaidirectory.com/category/" + category.Slug).AbsoluteUri),
                 new XElement(xmlns + "lastmod", category.Created.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:sszzz")),
                 new XElement(xmlns + "priority", "0.9"));
             root.Add(urlElement);

@@ -109,4 +109,14 @@ public static class SendGridService
 
         await SendEmailAsync(toEmail, toName, subject, plainTextContent, htmlContent);
     }
+
+    public static async Task SendFormSubmissionEmail(string name, string email, string message)
+    {
+        var ourEmail = new EmailAddress("admin@searchaidirectory.com", "SearchAiDirectory");
+        var subject = "Contact Form Submission Notification";
+        var content = $"Name: {name}\nEmail: {email}\nMessage: {message}";
+        var msg = MailHelper.CreateSingleEmail(ourEmail, ourEmail, subject, content, content);
+
+        await new SendGridClient(_apiKey).SendEmailAsync(msg);
+    }
 }

@@ -3,12 +3,26 @@
 [AllowAnonymous]
 [Area("Website")]
 [OutputCache(PolicyName = "GlobalCachePolicy")]
-public class ToolController(IToolService toolService, IEmbeddingService embeddingService, ILikeService likeService, ICommentService commentService, IHttpContextAccessor httpContextAccessor) : Controller
+public class ToolController(IToolService toolService, ICategoryService categoryService, IEmbeddingService embeddingService, ILikeService likeService, ICommentService commentService, IHttpContextAccessor httpContextAccessor) : Controller
 {
     private readonly HttpContext httpContext = httpContextAccessor.HttpContext;
 
+    [HttpGet("/categories")]
+    public async Task<IActionResult> Categories()
+    {
+        var categories = await categoryService.GetActiveCategories();
+        return View(categories);
+    }
+
+    [HttpGet("/category/{slug}")]
+    public async Task<IActionResult> Category(string slug)
+    {
+        var category = await categoryService.GetCategoryBySlug(slug);
+        return View(category);
+    }
+
     [HttpGet("/tools")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> Tools()
     {
         var tools = await toolService.GetAllTools();
         return View(tools);

@@ -2,13 +2,12 @@
 global using Microsoft.EntityFrameworkCore;
 global using SearchAiDirectory.Shared.Data;
 global using SearchAiDirectory.Shared.Models;
-global using SearchAiDirectory.Shared.Services;
 global using SearchAiDirectory.Shared.ThirdPartyService;
 global using SearchAiDirectory.Shared.Utilities;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Net.Http.Headers;
+global using System.Numerics.Tensors;
 global using System.Text;
 global using System.Text.Json;
-global using System.Net.Http.Headers;
 global using System.Text.Json.Serialization;
-global using System.Numerics.Tensors;

@@ -12,17 +12,16 @@
     <h1 class="text-4xl font-bold mb-3">Sign up</h1>
 
     <!-- Subheading -->
-    <p class="text-yellow-500 mb-5">Free To SignUp. No <i class="bi bi-credit-card"></i> needed.</p>
+    <p class="text-yellow-500 mb-5">Free To SignUp.</p>
 
     <div class="mt-6 text-center">
-        <label class="block text-sm font-medium text-red-600">@ViewBag.Message</label>
+        <label id="invalidMessage" class="block text-sm font-medium text-red-600">@ViewBag.Message</label>
     </div>
 
     <!-- Form -->
-    <form method="post" action="/Signup" class="space-y-6">
-        @Html.AntiForgeryToken()
-        <input type="hidden" id="ID" name="ID" />
+    <form method="post" action="/Signup" onsubmit="event.preventDefault(); onSubmitForm();" class="space-y-6">
 
+        @Html.AntiForgeryToken()
         <input type="hidden" id="ID" name="ID" value="@Model.ID" />
         <input type="hidden" id="TimeZone" name="TimeZone" />
 
@@ -41,12 +40,20 @@
             <div class="relative mt-1">
                 <input type="password" id="password" name="password" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" placeholder="Enter your password" required />
                 <button class="absolute inset-y-0 right-0 px-3 py-2" type="button" onclick="ShowPassword();">
-                    <i id="eye-icon" class="bi bi-eye"></i>
+                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="ShowPassword()">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-3-9a9 9 0 00-9 9 9 9 0 0018 0 9 9 0 00-9-9z" />
+                    </svg>
                 </button>
             </div>
         </div>
 
-        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">Sign up</button>
+        <div class="text-center g-recaptcha" id="html_element"></div>
+
+        <button type="submit"
+                id="SignUpButton"
+                class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+            Sign up
+        </button>
 
         <div class="mt-6 text-center">
             <small class="text-gray-500">
@@ -83,7 +90,6 @@
 
         const m = document.getElementById('invalidMessage');
         const b = document.getElementById('SignUpButton');
-
         var recaptcha_verified = false;
         var onloadCallback = function () {
 
@@ -91,12 +97,15 @@
                 'sitekey': '6LfzjKMqAAAAAKwjEGUMwdhhlI_Ad4QNMtsgd9n-',
                 'callback': function (token) {
                     recaptcha_verified = true;
+                    m.innerHTML = ""; // Clear any previous error messages
                 },
                 'expired-callback': function () {
-                    m.innerHTML = "Unable to Submit Form.";
+                    recaptcha_verified = false;
+                    m.innerHTML = "reCAPTCHA expired. Please verify again.";
                 },
                 'error-callback': function () {
-                    m.innerHTML = "Unable to Submit Form.";
+                    recaptcha_verified = false;
+                    m.innerHTML = "reCAPTCHA error. Please try again.";
                 },
                 'data-size': "compact"
             });

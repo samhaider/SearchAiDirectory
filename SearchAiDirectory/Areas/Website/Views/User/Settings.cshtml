@@ -1,0 +1,125 @@
+﻿@model User
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "User Profile Settings";
+    ViewData["MetaDescription"] = "Update your profile settings including name, email, and avatar.";
+    ViewData["MetaKeywords"] = "user profile, settings, update profile, avatar upload";
+}
+
+<div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">User Profile Settings</h1>
+    <form id="userProfileForm" method="post" action="/Settings" enctype="multipart/form-data" class="space-y-6"
+        onsubmit="return validateEmail()">
+        <div>
+            <div class="mt-2">
+                <img id="avatarPreview" src="@Model.Avatar" alt="Avatar Preview"
+                    class="hidden mt-2 w-32 h-32 object-cover rounded-md border border-gray-300" />
+            </div>
+            <label for="avatar" class="block text-sm font-medium text-gray-700">Upload Avatar</label>
+            <input type="file" id="avatar" name="avatar" accept="image/*"
+                class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500"
+                onchange="previewAvatar(event)" />
+        </div>
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+            <input type="text" id="name" name="name" value="@Model.Name"
+                class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 px-3"
+                required />
+        </div>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="email" name="email" value="@Model.Email"
+                class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 px-3"
+                required readonly />
+            <div class="flex items-center mt-2">
+                <button type="button" id="editEmailButton"
+                    class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
+                    onclick="toggleEmailEdit()">Change Email</button>
+                <button type="button" class="ml-2 text-gray-500 hover:text-blue-600" onclick="showInfo()">ℹ️</button>
+            </div>
+        </div>
+        <div id="confirmEmailDiv" class="hidden">
+            <label for="confirmEmail" class="block text-sm font-medium text-gray-700">Confirm Email Change</label>
+            <input type="email" id="confirmEmail" name="confirmEmail"
+                class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 px-3"
+                required />
+        </div>
+        <div>
+            <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200">Save
+                Changes</button>
+        </div>
+        <div id="emailError" class="text-red-500 hidden mt-2">Email addresses do not match.</div>
+    </form>
+</div>
+
+<!-- Info Modal -->
+<div id="infoModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 max-w-sm mx-auto">
+        <h2 class="text-lg font-bold mb-4">Change Email Information</h2>
+        <p>To change your email address, click the "Change Email" button. This will allow you to enter a new email
+            address and confirm it. Make sure to enter the same email in both fields to avoid errors.</p>
+        <button type="button" class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+            onclick="hideInfo()">Close</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('avatarPreview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden'); // Show the preview
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.classList.add('hidden'); // Hide the preview if no file is selected
+            }
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value;
+            const confirmEmail = document.getElementById('confirmEmail').value;
+            const emailError = document.getElementById('emailError');
+
+            if (email !== confirmEmail) {
+                emailError.classList.remove('hidden'); // Show error message
+                return false; // Prevent form submission
+            } else {
+                emailError.classList.add('hidden'); // Hide error message
+                return true; // Allow form submission
+            }
+        }
+
+        function toggleEmailEdit() {
+            const emailInput = document.getElementById('email');
+            const confirmEmailDiv = document.getElementById('confirmEmailDiv');
+            const editEmailButton = document.getElementById('editEmailButton');
+
+            if (emailInput.readOnly) {
+                emailInput.readOnly = false; // Make email editable
+                confirmEmailDiv.classList.remove('hidden'); // Show confirm email input
+                editEmailButton.textContent = 'Cancel'; // Change button text
+            } else {
+                emailInput.readOnly = true; // Make email read-only again
+                confirmEmailDiv.classList.add('hidden'); // Hide confirm email input
+                editEmailButton.textContent = 'Change Email'; // Reset button text
+                document.getElementById('confirmEmail').value = ''; // Clear confirm email input
+                document.getElementById('emailError').classList.add('hidden'); // Hide error message
+            }
+        }
+
+        function showInfo() {
+            document.getElementById('infoModal').classList.remove('hidden'); // Show info modal
+        }
+
+        function hideInfo() {
+            document.getElementById('infoModal').classList.add('hidden'); // Hide info modal
+        }
+    </script>
+}

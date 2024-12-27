@@ -135,15 +135,12 @@
                                     </a>
                                 </div>
                                 <div class="py-1 border-t border-gray-100">
-                                    <form method="post" action="/logout">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="group flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
-                                            <svg class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                            </svg>
-                                            Logout
-                                        </button>
-                                    </form>
+                                    <a href="/logout" class="group flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                                        <svg class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                        Logout
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -280,6 +277,7 @@
         </div>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

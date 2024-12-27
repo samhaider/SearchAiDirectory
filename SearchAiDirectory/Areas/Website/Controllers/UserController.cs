@@ -165,4 +165,52 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
         var user = userService.GetUserByID(userID).Result;
         return Json(user.Avatar);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Settings()
+    {
+        var userID = Convert.ToInt64(httpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value);
+        var user = await userService.GetUserByID(userID);
+        return View(user);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Settings(User model, IFormFile avatar, string confirmEmail)
+    {
+        var userID = Convert.ToInt64(httpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value);
+        var user = await userService.GetUserByID(userID);
+
+        // Check if email confirmation matches
+        if (model.Email != confirmEmail)
+        {
+            ModelState.AddModelError("Email", "Email confirmation does not match.");
+            return View("Index", model);
+        }
+
+        // Update user details
+        user.Name = model.Name;
+        user.Email = model.Email;
+
+        // Handle avatar upload
+        if (avatar is not null && avatar.Length > 0)
+        {
+            // Upload to Azure Storage (implement your Azure upload logic here)
+            var avatarUrl = await UploadToAzureStorage(avatar);
+            user.Avatar = avatarUrl;
+        }
+
+        await userService.UpdateUserNameAvatar(userID, user.Name, user.Avatar);
+        return RedirectToAction("Index");
+    }
+
+    private async Task<string> UploadToAzureStorage(IFormFile file)
+    {
+        var userID = Convert.ToInt64(httpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value);
+
+        string fileName = "user-" + userID + Path.GetExtension(file.FileName);
+        using var memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+        byte[] fileBytes = memoryStream.ToArray();
+        return await AzureStorageService.UploadBlobFiles(BlobContainers.user, fileName, fileBytes);
+    }
 }

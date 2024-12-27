@@ -8,9 +8,11 @@ public class Program
         var config = builder.Configuration;
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+        builder.Services.AddControllersWithViews();
 
         builder.Services.AddMemoryCache();
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
         builder.Services.AddOutputCache(options =>
             options.AddPolicy("GlobalCachePolicy", builder =>
             {
@@ -19,7 +21,6 @@ public class Program
                 builder.Expire(TimeSpan.FromSeconds(60));
             }));
 
-        builder.Services.AddDistributedMemoryCache();
         builder.Services.Configure<CookieTempDataProviderOptions>(options =>
         {
             options.Cookie.Name = "TempDataCookie";
@@ -52,9 +53,11 @@ public class Program
             .AllowCredentials();
         }));
 
-        //Adding services to the container
-        builder.Services.AddHttpContextAccessor();
-
+        builder.Services.AddRouting(options =>
+        {
+            options.LowercaseUrls = true;
+            options.LowercaseQueryStrings = true;
+        });
 
         builder.Services.AddDbContextFactory<ApplicationDataContext>(options =>
         {
@@ -71,6 +74,8 @@ public class Program
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);// Globally disable tracking for better read performance on large queries
         });
 
+        //Adding services to the container
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<IUserAuthenticator, UserAuthenticator>();
         builder.Services.AddTransient<IEmbeddingService, EmbeddingService>();
@@ -86,13 +91,21 @@ public class Program
         else app.UseMiddleware<ErrorHandlerMiddleware>();
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
-        app.UseRouting();
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            OnPrepareResponse = ctx =>
+            {
+                ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=31536000");
+            }
+        });
 
+        app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseOutputCache();
+        app.UseResponseCompression();
+
         app.UseCookiePolicy();
         app.UseSession();
         app.UseCors();

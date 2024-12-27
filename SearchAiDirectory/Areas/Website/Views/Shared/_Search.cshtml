@@ -1,0 +1,24 @@
+﻿<div class="flex justify-center w-full max-w-4xl md:max-w-6xl mx-auto my-4 md:mb-6">
+    <div class="relative w-full">
+        <form method="post" action="/tool/search" class="group">
+            <input type="text" id="query" name="query" class="w-full p-4 md:p-6 text-base md:text-lg border-2 border-yellow-400 rounded-2xl
+                              focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:border-yellow-500
+                              transition-all duration-300 ease-in-out
+                              shadow-lg group-hover:shadow-xl
+                              bg-white/90 backdrop-blur-sm" placeholder="Search for AI tools..." focus="focus"
+                required />
+            <button type="submit" role="button" class="absolute right-2 md:right-3 top-1/2 transform -translate-y-1/2
+                             bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl px-4 md:px-6 py-2 md:py-3
+                             flex items-center transition-all duration-300 ease-in-out
+                             shadow-md hover:shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span class="ml-2 font-medium hidden md:inline">Search</span>
+            </button>
+        </form>
+    </div>
+</div>

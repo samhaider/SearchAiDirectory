@@ -120,5 +120,6 @@ public static class AzureStorageService
 public enum BlobContainers
 {
     tools,
-    news
+    news,
+    user
 }

@@ -1,7 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text.Json.Serialization;
-
-namespace SearchAiDirectory.Shared.ThirdPartyService;
+﻿namespace SearchAiDirectory.Shared.ThirdPartyService;
 
 public static class OpenAiService
 {

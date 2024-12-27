@@ -16,4 +16,16 @@ public class HomeController(IToolService toolService, ICategoryService categoryS
         var model = new HomePageModel() { Categories = categoriesTask.Result, Top3Tools = top3ToolsTask.Result };
         return View(model);
     }
+
+    [HttpGet] public IActionResult About() => View();
+
+    [HttpGet] public IActionResult Contact() => View();
+
+    [HttpPost]
+    public async Task<IActionResult> Contact(string name, string email, string message)
+    {
+        await SendGridService.SendFormSubmissionEmail(name, email, message);
+        ViewBag.Message = "Thank you for your message! We will get back to you as soon as possible.";
+        return View();
+    }
 }

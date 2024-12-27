@@ -16,6 +16,7 @@
             <p class="mt-4 text-xl text-gray-500">
                 Browse our comprehensive collection of AI tools by category
             </p>
+            @await Html.PartialAsync("_Search")
         </div>
     </div>
 </div>
@@ -24,7 +25,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach (var category in Model.OrderByDescending(c => c.Tools.Count))
     {
-        <a href="/tool/category/@category.Slug" 
+        <a href="/category/@category.Slug" 
            class="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
