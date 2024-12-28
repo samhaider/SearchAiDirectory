@@ -52,7 +52,7 @@ public class NewsService(IDbContextFactory<ApplicationDataContext> dbContextFact
     public async Task<List<News>> GetAllNews()
     {
         using var context = dbContextFactory.CreateDbContext();
-        return await context.News.OrderBy(o => o.Created).ToListAsync();
+        return await context.News.OrderByDescending(o => o.Created).ToListAsync();
     }
 
 

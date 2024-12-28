@@ -6,3 +6,8 @@ global using Microsoft.Extensions.Hosting;
 global using SearchAiDirectory.Shared.Data;
 global using SearchAiDirectory.Shared.Services;
 global using SearchAiDirectory.Shared.ThirdPartyService;
+global using HtmlAgilityPack;
+global using SearchAiDirectory.Shared.AiAgents;
+global using SearchAiDirectory.Shared.Models;
+global using SearchAiDirectory.Shared.Utilities;
+global using SearchAiDirectory.Function.Utils;

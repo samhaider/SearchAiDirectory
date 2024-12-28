@@ -9,13 +9,12 @@ public static class CleanTools
         var services = BgUtil.GetServices();
         using var scope = services.CreateScope();
         var toolService = scope.ServiceProvider.GetRequiredService<IToolService>();
-        var embeddingService = scope.ServiceProvider.GetRequiredService<IEmbeddingService>();
 
         var allRows = LoadData.LoadCsv();
         var tools = await toolService.GetAllTools();
 
-        foreach (var tool in tools)
-            await embeddingService.CreateEmbeddingRecord(tool.ID);
+        //foreach (var tool in tools)
+        //    await embeddingService.CreateEmbeddingRecord(tool.ID);
 
 
         //var categoryTools = tools.Where(w => !w.CategoryID.HasValue).ToList();

@@ -3,7 +3,7 @@
 [AllowAnonymous]
 [Area("Website")]
 [OutputCache(PolicyName = "GlobalCachePolicy")]
-public class ToolController(IToolService toolService, ICategoryService categoryService, IEmbeddingService embeddingService, ILikeService likeService, ICommentService commentService, IHttpContextAccessor httpContextAccessor) : Controller
+public class ToolController(IToolService toolService, ICategoryService categoryService, ILikeService likeService, ICommentService commentService, IHttpContextAccessor httpContextAccessor) : Controller
 {
     private readonly HttpContext httpContext = httpContextAccessor.HttpContext;
 
@@ -36,9 +36,9 @@ public class ToolController(IToolService toolService, ICategoryService categoryS
         var tool = await toolService.GetToolBySlug(slug);
         if (tool is null) return RedirectToAction("ToolNotFound");
 
-        var relatedTools = await embeddingService.Get3RelatedTools(tool.ID, tool.Embedding.EmbeddingCode);
-
-        var model = new ToolPageModel() { Tool = tool, RelatedTools = relatedTools };
+        var model = new ToolPageModel() { Tool = tool };
+        if (tool.Embedding is not null)
+            model.RelatedTools = await toolService.Get3RelatedTools(tool.ID, tool.Embedding.EmbeddingCode);
 
         // Check if the current user has liked this tool
         if (httpContext.User.Identity.IsAuthenticated)
@@ -54,7 +54,7 @@ public class ToolController(IToolService toolService, ICategoryService categoryS
     public async Task<IActionResult> Search(string query)
     {
         var queryEmbedding = await OpenAiService.GetEmbedding(query);
-        var tools = await embeddingService.EmbeddingSearchTools(queryEmbedding, 9);
+        var tools = await toolService.EmbeddingSearchTools(queryEmbedding, 9);
         return View("List", tools);
     }
 

@@ -6,9 +6,12 @@ public class SerperService
     private static readonly string SerperNewsEndpoint = "https://google.serper.dev/news";
     private static readonly JsonSerializerOptions jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
-    public static async Task<List<SerperNews>> GetWeeklyNews()
+    public static readonly SerperRequest WeeklySerperRequest = new() { q = "Ai, Ai Saas, Ai Tools", tbs = "qdr:w" };
+    public static readonly SerperRequest DailySerperRequest = new() { q = "New Ai Tools", tbs = "qdr:d" };
+
+
+    public static async Task<List<SerperNews>> GetNews(SerperRequest serperRequest)
     {
-        var serperRequest = new SerperRequest();
         var content = JsonSerializer.Serialize(serperRequest, jsonOptions);
         var data = new StringContent(content: content, encoding: Encoding.UTF8, mediaType: "application/json");
 
@@ -24,11 +27,12 @@ public class SerperService
     }
 
 #pragma warning disable IDE1006 // Naming Styles
-    internal class SerperRequest
+    public class SerperRequest
     {
-        public string q { get; } = "Ai, Ai Tools, Ai Saas";
+        public string q { get; set; }
         public string location { get; } = "United States";
-        public string tbs { get; } = "qdr:w";
+        public int num { get; } = 30;
+        public string tbs { get; set; }
     }
     internal class SerperResponse
     {

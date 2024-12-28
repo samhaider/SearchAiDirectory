@@ -78,7 +78,6 @@ public class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<IUserAuthenticator, UserAuthenticator>();
-        builder.Services.AddTransient<IEmbeddingService, EmbeddingService>();
         builder.Services.AddTransient<IToolService, ToolService>();
         builder.Services.AddTransient<ICategoryService, CategoryService>();
         builder.Services.AddTransient<ILikeService, LikeService>();

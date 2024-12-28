@@ -34,7 +34,7 @@ public static class ScrapeWebsite
             websiteUrl = Regex.Match(websiteUrlResponse, @"http[s]?://[^\s/$.?#].[^\s]*").Value.Trim();
 
             var websiteAgent = new AgentBase("WebsiteFAQ", 0.8, SystemPrompts.WebsiteFAQ);
-            websiteAgent.SetupWebsiteContentForAi(websiteContent + "\n\n\nNO RESPONSE IS REQUIRED FOR THIS, AS THIS IS THE WEBSITE CONTENT, RESPOND THE NEXT INPUT.");
+            websiteAgent.SetupContentAfterInitialization(websiteContent + "\n\n\nNO RESPONSE IS REQUIRED FOR THIS, AS THIS IS THE WEBSITE CONTENT, RESPOND THE NEXT INPUT.");
             var toolDescription = await websiteAgent.DirectOpenAiResponse("Give me a small description less than 450 character for this tool that would be helpful to the reader, and what problems it can solve. No pre context or post context is needed, just the description in plain text.");
             var metaDescription = await websiteAgent.DirectOpenAiResponse("Give me a meta description less than 140 character for this tool. no pre context or no post context is needed.");
             var metaKeywords = await websiteAgent.DirectOpenAiResponse("Give me a meta keywords less than 140 character in comma delimited format for this tool. no pre context or no post context is needed.");

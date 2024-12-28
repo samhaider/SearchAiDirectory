@@ -24,6 +24,8 @@ public class Program
         builder.Services.AddHttpClient();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddTransient<INewsService, NewsService>();
+        builder.Services.AddTransient<IToolService, ToolService>();
+        builder.Services.AddTransient<ICategoryService, CategoryService>();
 
         builder.Build().Run();
     }
