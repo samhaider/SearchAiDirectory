@@ -1,9 +1,9 @@
-﻿using PuppeteerSharp;
-using System.Text;
+﻿using HtmlAgilityPack;
+using PuppeteerSharp;
 
-namespace SearchAiDirectory.Function.Utils;
+namespace SearchAiDirectory.Shared.Utilities;
 
-public static class ScrapeWebsite
+public static class WebsiteScrapper
 {
     private static async Task<HtmlDocument> LoadWebsite(string url)
     {
@@ -25,9 +25,9 @@ public static class ScrapeWebsite
         }
     }
 
-    public static async Task<string> GetWebsiteTextContent(string link)
+    public static async Task<string> GetWebsiteTextContent(string url)
     {
-        var htmlDocument = await LoadWebsite(link);
+        var htmlDocument = await LoadWebsite(url);
         if (htmlDocument is null) return null;
 
         // Assuming the main content is within <article> tags
@@ -44,9 +44,9 @@ public static class ScrapeWebsite
         return RegexHelper.HtmlToCleanText(content);
     }
 
-    public static async Task<string> GetWebsiteHtmlContent(string link)
+    public static async Task<string> GetWebsiteHtmlContent(string url)
     {
-        var htmlDocument = await LoadWebsite(link);
+        var htmlDocument = await LoadWebsite(url);
         if (htmlDocument is null) return null;
 
         // Assuming the main content is within <article> tags
@@ -98,7 +98,16 @@ public static class ScrapeWebsite
         var htmlDocument = await LoadWebsite(url);
         if (htmlDocument is null) return null;
 
-        var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+        var browserFetcher = new BrowserFetcher(SupportedBrowser.Chromium);
+        await browserFetcher.DownloadAsync();
+
+        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        {
+            Browser = SupportedBrowser.Chromium,
+            Headless = true,
+            Args = ["--no-sandbox", "--disable-setuid-sandbox"]
+        });
+
         var page = await browser.NewPageAsync();
         await page.SetViewportAsync(new ViewPortOptions { Width = 1920, Height = 1080 });
         await page.GoToAsync(url);

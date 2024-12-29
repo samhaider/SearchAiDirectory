@@ -10,7 +10,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
         {
             if (string.IsNullOrEmpty(news.link)) continue;
             
-            string websiteContent = await ScrapeWebsite.GetWebsiteHtmlContent(news.link);
+            string websiteContent = await WebsiteScrapper.GetWebsiteHtmlContent(news.link);
             string newsTitle = news.title;
 
             if (string.IsNullOrEmpty(websiteContent) || websiteContent.Length < 300) continue;
@@ -24,7 +24,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
             foreach (var website in toolWebsites.Split(","))
                 if (RegexHelper.IsValidUrl(website))
                 {
-                    var toolWebsiteContent = await ScrapeWebsite.ScrapeWebsiteWithInternalLinks(website);
+                    var toolWebsiteContent = await WebsiteScrapper.ScrapeWebsiteWithInternalLinks(website);
                     var toolAiAgent = new AgentBase("Tool Details", .7, SystemPrompts.ToolDetails);
                     toolAiAgent.SetupContentAfterInitialization($"Scraped content from the ai tool website: {toolWebsiteContent}");
 
@@ -39,6 +39,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
                     var categoryID = await FindCategory(toolName, toolDescription);
                     var tool = new Tool
                     {
+                        CategoryID = categoryID,
                         Name = toolName.Trim().Normalize(),
                         Website = website.Trim().Normalize(),
                         WebsiteContent = toolWebsiteContent.Trim().Normalize(),
@@ -47,15 +48,14 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
                         MetaKeywords = metaKeywords.Trim().Normalize(),
                         PriceModel = pricingModel.Trim().Normalize(),
                     };
+                    tool = await toolService.AddTool(tool);
 
-                    if (categoryID != 0) tool.CategoryID = categoryID;
-                    var toolID = await toolService.AddTool(tool);
                     try
                     {
-                        var websiteImage = await ScrapeWebsite.GetWebsiteScreenshot(website);
+                        var websiteImage = await WebsiteScrapper.GetWebsiteScreenshot(website);
                         if (websiteImage is not null)
                         {
-                            var imageFilename = $"/{toolID}/{toolName.ToLower().Replace(" ", "")}.png";
+                            var imageFilename = $"/{tool.ID}/{tool.Slug}.png";
                             var toolImageUrl = await AzureStorageService.UploadBlobFiles(BlobContainers.tools, imageFilename, websiteImage);
                             tool.ImageUrl = toolImageUrl;
                             await toolService.UpdateTool(tool);
@@ -67,7 +67,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
         }
     }
 
-    private async Task<long> FindCategory(string toolName, string toolDescription)
+    private async Task<long?> FindCategory(string toolName, string toolDescription)
     {
         var allCategories = await categoryService.GetAllCategories();
         var categoryList = string.Join("\n", allCategories.Select(s => $"ID:{s.ID} |Name:{s.Name}").ToArray());
@@ -88,7 +88,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
 
         if (categoryName.Contains("categor", StringComparison.OrdinalIgnoreCase)) return 0;
 
-        long categoryID = 0;
+        long? categoryID = null;
         if (!await categoryService.CategoryExists(categoryName))
         {
             string categorgyMetaDescription = await categoryAgent.DirectOpenAiResponse("Create a meta description for this category without any context. the meta description should be less than 140 characters.");

@@ -7,7 +7,7 @@ public interface IToolService
     Task<Tool> GetToolByID(long toolID);
     Task<Tool> GetToolByName(string toolName);
     Task<Tool> GetToolBySlug(string toolSlug);
-    Task<long> AddTool(Tool newTool);
+    Task<Tool> AddTool(Tool newTool);
     Task UpdateTool(Tool updatedTool);
     Task ChangeCategory(long toolID, long categoryID);
     Task UpdateToolImageUrl(long toolID, string imageUrl);
@@ -23,7 +23,7 @@ public class ToolService(IDbContextFactory<ApplicationDataContext> dbContextFact
     public async Task<IList<Tool>> GetAllTools()
     {
         using var db = dbContextFactory.CreateDbContext();
-        return await db.Tools.ToListAsync();
+        return await db.Tools.OrderByDescending(o => o.Created).ToListAsync();
     }
 
     public async Task<bool> ToolExists(string name)
@@ -62,7 +62,7 @@ public class ToolService(IDbContextFactory<ApplicationDataContext> dbContextFact
             .SingleOrDefaultAsync();
     }
 
-    public async Task<long> AddTool(Tool newTool)
+    public async Task<Tool> AddTool(Tool newTool)
     {
         using var db = dbContextFactory.CreateDbContext();
         
@@ -71,7 +71,7 @@ public class ToolService(IDbContextFactory<ApplicationDataContext> dbContextFact
         newTool.Created = DateTime.UtcNow;
         await db.Tools.AddAsync(newTool);
         await db.SaveChangesAsync();
-        return newTool.ID;
+        return newTool;
     }
 
     public async Task UpdateTool(Tool updateTool)
@@ -91,7 +91,7 @@ public class ToolService(IDbContextFactory<ApplicationDataContext> dbContextFact
     public async Task<IList<Tool>> GetTop3Tools()
     {
         using var db = dbContextFactory.CreateDbContext();
-        return await db.Tools.OrderBy(o => o.Created).Take(3).ToListAsync();
+        return await db.Tools.OrderByDescending(o => o.Created).Take(3).ToListAsync();
     }
 
     public async Task ChangeCategory(long toolID, long categoryID)
