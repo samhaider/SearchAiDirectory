@@ -45,7 +45,7 @@ public class WriteAboutLatestNews(INewsService newsService)
 
             newNews.ImageUrl = await ImageUtils.CreateImageAndUploadToAzure(aiImagePrompt, newNews.ID);
             await newsService.UpdateNews(newNews);
-            await newsService.CreateNewsEmbedding(newNews.ID, newsEmbeddingCode);
+            await newsService.CreateNewsEmbedding(newNews.ID);
         }
     }
 }

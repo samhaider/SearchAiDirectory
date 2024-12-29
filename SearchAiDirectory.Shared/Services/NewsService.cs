@@ -9,7 +9,7 @@ public interface INewsService
     Task<bool> NewsEmbeddingExsits(long newsID);
     Task UpdateNews(News updatedNews);
 
-    Task CreateNewsEmbedding(long newsID, float[] newsEmbeddingCode);
+    Task CreateNewsEmbedding(long newsID);
     Task<KeyValuePair<long, float>[]> GetNewsEmbeddingValues(float[] queryEmbeddingCode, int topN);
     Task<IList<News>> NewsEmbeddingSearch(float[] queryEmbeddingCode, int topN);
     Task<IList<News>> Get3RelatedNews(long newsID, string newsEmbeddingCode);
@@ -40,7 +40,7 @@ public class NewsService(IDbContextFactory<ApplicationDataContext> dbContextFact
     {
         using var context = dbContextFactory.CreateDbContext();
 
-        return await context.News.FirstOrDefaultAsync(n => n.Slug == slug);
+        return await context.News.Include(i => i.Embedding).FirstOrDefaultAsync(n => n.Slug == slug);
     }
 
     public async Task<News> GetNewsByID(long ID)
@@ -62,15 +62,24 @@ public class NewsService(IDbContextFactory<ApplicationDataContext> dbContextFact
         return await context.NewsEmbeddings.AnyAsync(n => n.NewsID == newsID);
     }
 
-    public async Task CreateNewsEmbedding(long newsID, float[] newsEmbeddingCode)
+    public async Task CreateNewsEmbedding(long newsID)
     {
         using var context = dbContextFactory.CreateDbContext();
+        if (await context.NewsEmbeddings.AnyAsync(a => a.NewsID == newsID)) return;
+
+        var news = await context.News.SingleOrDefaultAsync(s => s.ID == newsID);
+        var combinedText = $"{news.Title}|{news.Content}|{news.WebsiteContent}";
+
+        var newEmbeddingCode = await OpenAiService.GetEmbedding(combinedText);
+        if (newEmbeddingCode is null) return;
+
         var newsEmbedding = new NewsEmbedding()
         {
             NewsID = newsID,
-            EmbeddingCode = JsonSerializer.Serialize(newsEmbeddingCode),
+            EmbeddingCode = JsonSerializer.Serialize(newEmbeddingCode),
             CreatedOn = DateTime.UtcNow
         };
+
         await context.NewsEmbeddings.AddAsync(newsEmbedding);
         await context.SaveChangesAsync();
     }

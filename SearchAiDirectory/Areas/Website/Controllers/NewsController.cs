@@ -16,6 +16,11 @@ public class NewsController(INewsService newsService) : Controller
     public async Task<IActionResult> News(string slug)
     {
         var news = await newsService.GetNewsBySlug(slug);
-        return View(news);
+
+        var model = new NewsPageModel() { News = news };
+        if (news.Embedding is not null)
+            model.RelatedNews = await newsService.Get3RelatedNews(news.ID, news.Embedding.EmbeddingCode);
+
+        return View(model);
     }
 }
