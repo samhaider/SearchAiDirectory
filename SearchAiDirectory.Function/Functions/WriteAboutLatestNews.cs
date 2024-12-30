@@ -10,7 +10,7 @@ public class WriteAboutLatestNews(INewsService newsService)
         {
             float uniqueness = 1;
             string newsTitle = news.title;
-            string websiteContent = await ScrapeWebsite.GetWebsiteTextContent(news.link);
+            string websiteContent = await WebsiteScrapper.GetWebsiteTextContent(news.link);
 
             if (string.IsNullOrEmpty(websiteContent) || websiteContent.Length < 300) continue;
 
