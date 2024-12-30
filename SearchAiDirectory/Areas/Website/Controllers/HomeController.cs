@@ -22,8 +22,15 @@ public class HomeController(IToolService toolService, ICategoryService categoryS
     [HttpGet] public IActionResult Contact() => View();
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Contact(string name, string email, string message)
     {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Message = "Please fill out the form properly before sending the message.";
+            return View();
+        }
+
         await SendGridService.SendFormSubmissionEmail(name, email, message);
         ViewBag.Message = "Thank you for your message! We will get back to you as soon as possible.";
         return View();

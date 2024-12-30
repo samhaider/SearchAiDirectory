@@ -26,6 +26,7 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(string email, string password, bool persist)
     {
         if (!await userService.EmailExisits(email))
@@ -61,6 +62,7 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Signup(User newUser)
     {
         var signupCompleted = await userService.SignUp(newUser);
@@ -73,6 +75,7 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     public IActionResult ForgotPassword() => View();
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(string email)
     {
         if (!await userService.EmailExisits(email))
@@ -104,6 +107,7 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ConfirmCode(string email, string code)
     {
         if (!await userService.EmailExisits(email))
@@ -128,6 +132,7 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPassword(string email, string password)
     {
         if (await userService.ChangePassword(email, password))
