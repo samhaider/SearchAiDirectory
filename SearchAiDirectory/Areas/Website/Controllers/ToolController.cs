@@ -51,11 +51,14 @@ public class ToolController(IToolService toolService, ICategoryService categoryS
     }
 
     [HttpPost("/tool/search")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Search(string query)
     {
+        if (!ModelState.IsValid || string.IsNullOrEmpty(query)) return Redirect("/");
+
         var queryEmbedding = await OpenAiService.GetEmbedding(query);
         var tools = await toolService.EmbeddingSearchTools(queryEmbedding, 9);
-        return View("List", tools);
+        return View("Tools", tools);
     }
 
     [HttpPost("/tool/togglelike/{toolId}")]
