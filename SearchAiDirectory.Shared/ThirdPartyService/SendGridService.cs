@@ -5,7 +5,7 @@ namespace SearchAiDirectory.Shared.ThirdPartyService;
 
 public static class SendGridService
 {
-    private static readonly string _apiKey = "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";
+    private static readonly string _apiKey = "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";
     private static readonly string _contactList = "b2463783-1698-4171-ae58-434ca16cf2fc";
 
     private static async Task<string> GetHtmlContentFromServer(string filePath)

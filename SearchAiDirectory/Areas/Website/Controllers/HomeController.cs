@@ -31,6 +31,12 @@ public class HomeController(IToolService toolService, ICategoryService categoryS
             return View();
         }
 
+        if (!await AbstractEmailApi.ValidateEmail(email))
+        {
+            ViewBag.Message = "Please enter a valid email address.";
+            return View();
+        }
+
         await SendGridService.SendFormSubmissionEmail(name, email, message);
         ViewBag.Message = "Thank you for your message! We will get back to you as soon as possible.";
         return View();

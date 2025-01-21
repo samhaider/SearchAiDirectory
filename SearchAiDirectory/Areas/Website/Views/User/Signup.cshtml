@@ -19,7 +19,7 @@
     </div>
 
     <!-- Form -->
-    <form method="post" action="/Signup" onsubmit="event.preventDefault(); onSubmitForm();" class="space-y-6">
+    <form method="post" action="/Signup" id="signup-form" onsubmit="event.preventDefault(); onSubmitForm();" class="space-y-6">
 
         @Html.AntiForgeryToken()
         <input type="hidden" id="ID" name="ID" value="@Model.ID" />

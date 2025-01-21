@@ -65,10 +65,24 @@ public class UserController(IHttpContextAccessor httpContextAccessor, IUserServi
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Signup(User newUser)
     {
+        if (!await AbstractEmailApi.ValidateEmail(newUser.Email))
+        {
+            ViewBag.Message = "Please enter a valid email address.";
+            return View(newUser);
+        }
+
         var signupCompleted = await userService.SignUp(newUser);
-        await SendGridService.SendWelcomeEmail(newUser.Email, newUser.Name);
-        await SendGridService.AddContactToList(newUser.Email, newUser.Name);
-        return signupCompleted ? Redirect("login") : View(newUser);
+        if (signupCompleted)
+        {
+            await SendGridService.SendWelcomeEmail(newUser.Email, newUser.Name);
+            await SendGridService.AddContactToList(newUser.Email, newUser.Name);
+            return Redirect("login");
+        }
+        else
+        {
+            ViewBag.Message = "Unable to create account, please contact support at support@searchaidirectory.com";
+            return View(newUser);
+        }
     }
 
     [HttpGet]
