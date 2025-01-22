@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace SearchAiDirectory.Function.Functions;
 
 public class FindNewTools(IToolService toolService, ICategoryService categoryService)
@@ -27,6 +25,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
                 if (RegexHelper.IsValidUrl(website))
                 {
                     var toolWebsiteContent = await WebsiteScrapper.ScrapeWebsiteWithInternalLinks(website);
+                    if(toolWebsiteContent.Length < 500) continue;
 
                     var toolAiAgent = new AgentBase("Tool Details", .7, SystemPrompts.ToolDetails);
                     toolAiAgent.SetupContentAfterInitialization($"Scraped content from the ai tool website: {toolWebsiteContent}");
