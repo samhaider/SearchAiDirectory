@@ -24,25 +24,21 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
             foreach (var website in toolWebsites.Split(","))
                 if (RegexHelper.IsValidUrl(website))
                 {
-                    var toolWebsiteContent = await WebsiteScrapper.ScrapeWebsiteWithInternalLinks(website);
-                    if(toolWebsiteContent.Length < 500) continue;
+                    var toolContent = await WebsiteScrapper.ScrapeWebsiteWithInternalLinks(website);
+
+                    if (string.IsNullOrEmpty(toolContent) || toolContent.Length < 500)
+                    {
+                        var researchAgent = new ResearchAgent();
+                        toolContent = await researchAgent.ResearchResponse($"\nTool Website: {website}");
+                    }
+
+                    if (string.IsNullOrEmpty(toolContent) || toolContent.Length < 500) continue;
 
                     var toolAiAgent = new AgentBase("Tool Details", .7, SystemPrompts.ToolDetails);
-                    toolAiAgent.SetupContentAfterInitialization($"Scraped content from the ai tool website: {toolWebsiteContent}");
+                    toolAiAgent.SetupContentAfterInitialization($"Content from the ai tool website: {toolContent}");
 
                     var toolName = await toolAiAgent.DirectOpenAiResponse("What is the name of the tool? Give me the name and name only. no pre context or no post context is needed.");
                     if (await toolService.ToolExists(toolName.Trim().Normalize())) continue;
-
-                    if (string.IsNullOrEmpty(toolWebsiteContent) || toolWebsiteContent.Length < 500)
-                    {
-                        var researchAgent = new ResearchAgent();
-                        toolWebsiteContent = await researchAgent.ResearchResponse(
-                            $"Tool Name: {toolName}" +
-                            $"\nTool Website: {website}");
-
-                        toolAiAgent = new AgentBase("Tool Details", .7, SystemPrompts.ToolDetails);
-                        toolAiAgent.SetupContentAfterInitialization($"Scraped content from the ai tool website: {toolWebsiteContent}");
-                    }
 
                     var toolDescription = await toolAiAgent.DirectOpenAiResponse("What is the description of the tool? no pre context or no post context is needed.");
                     var metaDescription = await toolAiAgent.DirectOpenAiResponse("Give me a meta description less than 140 character for this tool. no pre context or no post context is needed.");
@@ -55,7 +51,7 @@ public class FindNewTools(IToolService toolService, ICategoryService categorySer
                         CategoryID = categoryID,
                         Name = toolName.Trim().Normalize(),
                         Website = website.Trim().Normalize(),
-                        WebsiteContent = toolWebsiteContent.Trim().Normalize(),
+                        WebsiteContent = toolContent.Trim().Normalize(),
                         Description = toolDescription.Trim().Normalize(),
                         MetaDescription = metaDescription.Trim().Normalize(),
                         MetaKeywords = metaKeywords.Trim().Normalize(),
