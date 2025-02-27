@@ -20,17 +20,27 @@ SearchAiDirectory is a powerful and efficient AI-driven search directory designe
 ## Project Structure
 ```
 /SearchAiDirectory
-├── backend
-│   ├── app.py
-│   ├── models
-│   └── utils
-├── frontend
-│   ├── public
-│   ├── src
-│   └── package.json
-├── docker-compose.yml
-├── README.md
-└── requirements.txt
+├── Areas
+│   └── Website
+│       ├── Views
+│       │   ├── Home
+│       │   │   └── About.cshtml
+│       │   └── User
+│       │       ├── Signup.cshtml
+│       │       └── EmailConfirmed.cshtml
+├── Pages
+│   ├── Index.cshtml
+│   ├── Privacy.cshtml
+│   └── _ViewImports.cshtml
+├── wwwroot
+│   ├── css
+│   ├── js
+│   └── lib
+├── _Layout.cshtml
+├── appsettings.json
+├── Program.cs
+├── Startup.cs
+└── SearchAiDirectory.csproj
 ```
 
 ## Installation

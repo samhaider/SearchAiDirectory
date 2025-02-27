@@ -99,7 +99,7 @@ public class ToolService(IDbContextFactory<ApplicationDataContext> dbContextFact
     public async Task<IList<Tool>> GetTop3Tools()
     {
         using var db = await dbContextFactory.CreateDbContextAsync();
-        return await db.Tools.OrderByDescending(o => o.Created).Take(3).ToListAsync();
+        return await db.Tools.Where(w => !string.IsNullOrEmpty(w.ImageUrl)).OrderByDescending(o => o.Created).Take(3).ToListAsync();
     }
 
     public async Task ChangeCategory(long toolID, long categoryID)
