@@ -4,7 +4,7 @@ public static class LoadData
 {
     public static List<CsvModel> LoadCsv()
     {
-        string csvFilePath = "C:\\Users\\Sam\\Downloads\\futuretools2.csv";
+        string csvFilePath = "C:\\Users\\Sam\\Downloads\\futuretools.csv";
         string[] allLines = File.ReadAllLines(csvFilePath);
 
         if (allLines.Length == 0)

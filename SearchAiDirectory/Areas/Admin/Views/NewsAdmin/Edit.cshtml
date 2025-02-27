@@ -1,0 +1,101 @@
+﻿@model News
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mx-auto mt-5 p-4 bg-white shadow-md rounded-lg">
+    <h2 class="mb-6 text-3xl font-bold text-gray-800">Edit News</h2>
+    <form asp-action="Edit" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="form-group">
+                    <label asp-for="Title" class="block text-sm font-medium text-gray-700">Title</label>
+                    <input asp-for="Title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Slug" class="block text-sm font-medium text-gray-700">Slug</label>
+                    <input asp-for="Slug" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="Slug" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label asp-for="Content" class="block text-sm font-medium text-gray-700">Content</label>
+                <textarea asp-for="Content" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="5"></textarea>
+                <span asp-validation-for="Content" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="form-group">
+                    <label asp-for="ImageUrl" class="block text-sm font-medium text-gray-700">Image URL</label>
+                    <input asp-for="ImageUrl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="ImageUrl" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="MetaDescription" class="block text-sm font-medium text-gray-700">Meta Description</label>
+                    <input asp-for="MetaDescription" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="MetaDescription" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="form-group">
+                    <label asp-for="MetaKeywords" class="block text-sm font-medium text-gray-700">Meta Keywords</label>
+                    <input asp-for="MetaKeywords" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="MetaKeywords" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Website" class="block text-sm font-medium text-gray-700">Website</label>
+                    <input asp-for="Website" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="Website" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label asp-for="WebsiteContent" class="block text-sm font-medium text-gray-700">Website Content</label>
+                <textarea asp-for="WebsiteContent" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="5"></textarea>
+                <span asp-validation-for="WebsiteContent" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="form-group">
+                    <label asp-for="Created" class="block text-sm font-medium text-gray-700">Created</label>
+                    <input asp-for="Created" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" readonly />
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Modified" class="block text-sm font-medium text-gray-700">Modified</label>
+                    <input asp-for="Modified" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label asp-for="Embedding.EmbeddingCode" class="block text-sm font-medium text-gray-700">Embedding Code</label>
+                <input asp-for="Embedding.EmbeddingCode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                <span asp-validation-for="Embedding.EmbeddingCode" class="text-red-500 text-sm"></span>
+            </div>
+        </div>
+        <div class="flex justify-between items-center">
+            <a asp-action="List" class="btn btn-secondary bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Back to List</a>
+            <input type="submit" value="Save" class="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    
+}

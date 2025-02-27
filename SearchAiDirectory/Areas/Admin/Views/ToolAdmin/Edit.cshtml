@@ -1,0 +1,58 @@
+﻿@model Tool
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Edit Tool</h2>
+    <form method="post">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="Name">Name</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="Name" name="Name" type="text" value="@Model.Name">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="Slug">Slug</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="Slug" name="Slug" type="text" value="@Model.Slug">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="Description">Description</label>
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="Description" name="Description">@Model.Description</textarea>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="Website">Website</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="Website" name="Website" type="text" value="@Model.Website">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="ImageUrl">Image URL</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="ImageUrl" name="ImageUrl" type="text" value="@Model.ImageUrl">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="WebsiteContent">Website Content</label>
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="WebsiteContent" name="WebsiteContent">@Model.WebsiteContent</textarea>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="MetaDescription">Meta Description</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="MetaDescription" name="MetaDescription" type="text" value="@Model.MetaDescription">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="MetaKeywords">Meta Keywords</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="MetaKeywords" name="MetaKeywords" type="text" value="@Model.MetaKeywords">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="PriceModel">Price Model</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="PriceModel" name="PriceModel" type="text" value="@Model.PriceModel">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="IsConfirmed">Is Confirmed</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="IsConfirmed" name="IsConfirmed" type="checkbox" @(Model.IsConfirmed ? "checked" : "")>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="LikeCount">Like Count</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="LikeCount" name="LikeCount" type="number" value="@Model.LikeCount">
+        </div>
+        <div class="flex items-center justify-between">
+            <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="/Admin/ToolAdmin/List">Cancel</a>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Save</button>
+        </div>
+    </form>
+</div>

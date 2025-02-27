@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SearchAiDirectory.com</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    @RenderSection("Styles", required: false)
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    SearchAiDirectory.com - Dashboard
+                </h1>
+            </div>
+        </header>
+        <div class="flex flex-1">
+            <!-- Sidebar -->
+            <aside class="w-64 bg-gray-800 text-white">
+                <div class="p-4">
+                    <nav class="space-y-2">
+                        <a href="/admin/tooladmin/list" class="block px-4 py-2 rounded hover:bg-gray-700">Tools</a>
+                        <a href="/admin/newsadmin/list" class="block px-4 py-2 rounded hover:bg-gray-700">News</a>
+                    </nav>
+                </div>
+            </aside>
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                @RenderBody()
+            </main>
+        </div>
+        <!-- Footer -->
+        <footer class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                <div class="text-center text-gray-500">
+                    &copy; 2023 Your Company, Inc. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

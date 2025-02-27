@@ -6,7 +6,7 @@ namespace SearchAiDirectory.ConsoleApp;
 
 public static class WebScraper
 {
-    private static readonly string[] sitePages = ["about", "services", "products", "contact", "about us", "our services", "our products", "contact us", "about-us", "our-services", "our-products", "contact-us", "who we are", "what we do", "our team", "team", "team members", "projects", "portfolio"];
+    private static readonly string[] sitePages = ["about", "services", "products", "contact", "about us", "our services", "our products", "contact us", "about-us", "our-services", "our-products", "contact-us", "who we are", "what we do", "our team", "team", "team members", "projects", "portfolio", "billing", "packages", "plans", "price", "pricing"];
 
     public static async Task<string> GetFinalUrl(string url)
     {

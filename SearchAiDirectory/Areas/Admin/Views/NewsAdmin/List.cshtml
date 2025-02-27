@@ -1,0 +1,32 @@
+﻿@model List<News>
+@{
+    Layout = "_Layout";
+}
+
+<h1 class="font-bold my-4">News List</h1>
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-800 text-white">
+        <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Title | Description</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
+        </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+        @foreach (var news in Model)
+        {
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900">@news.Title</div>
+                    <div class="text-sm text-gray-500">@news.MetaDescription</div>
+                    <div class="text-sm text-gray-500">@news.MetaKeywords</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@news.Created.ToString("MM/dd/yyyy")</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <a href="/Admin/NewsAdmin/Edit/@news.ID" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                    <a href="/Admin/NewsAdmin/Delete/@news.ID" class="text-red-600 hover:text-red-900 ml-4">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
